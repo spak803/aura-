@@ -1,202 +1,64 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURA AI | Autonomous Agent Guard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+KR:wght@300;500;700&display=swap" rel="stylesheet">
-    <style>
-        body { background: #020617; color: #e2e8f0; font-family: 'Noto Sans KR', sans-serif; overflow-x: hidden; }
-        .orbitron { font-family: 'Orbitron', sans-serif; }
-        .neon-blue { text-shadow: 0 0 10px #3b82f6; color: #60a5fa; }
-        .neon-red { text-shadow: 0 0 10px #ef4444; color: #f87171; }
-        .glass-panel { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(59, 130, 246, 0.2); }
-        .loop-alert { animation: pulse-red 1.5s infinite; }
-        @keyframes pulse-red { 0%, 100% { background: rgba(239, 68, 68, 0.1); } 50% { background: rgba(239, 68, 68, 0.3); } }
-        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
-</head>
-<body class="p-8">
-
-    <header class="max-w-6xl mx-auto flex justify-between items-end mb-10">
-        <div>
-            <h1 class="orbitron text-4xl font-bold tracking-tighter neon-blue">AURA AI <span class="text-sm font-light tracking-widest text-slate-500 ml-2">v2.1 CORE</span></h1>
-            <p class="text-slate-400 text-sm mt-2 font-light">Agentic Workflow Optimization & Loop Prevention</p>
-        </div>
-        <div class="text-right">
-            <div class="text-xs orbitron text-blue-500 mb-1">NETWORK STATUS</div>
-            <div class="flex items-center space-x-2">
-                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                <span class="orbitron text-sm">OPTIMIZATION ACTIVE</span>
+<div class="col-span-8 glass-panel rounded-3xl p-6 relative">
+    <h3 class="orbitron text-xs text-blue-500 mb-6 tracking-widest">ADVANCED SYSTEM GUARD STATUS</h3>
+    <div class="grid grid-cols-3 gap-4">
+        <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-800 flex flex-col justify-between h-20">
+            <p class="text-[9px] text-slate-500 orbitron">ADAPTIVE GUARD</p>
+            <div class="flex items-center justify-between">
+                <span class="text-[11px] font-medium">PATTERN ANALYSIS</span>
+                <span class="flex h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
             </div>
+            <div class="text-[9px] text-green-400 opacity-70">STATUS: ON-WATCH</div>
         </div>
-    </header>
-
-    <main class="max-w-6xl mx-auto grid grid-cols-12 gap-6">
-        
-        <div class="col-span-8 space-y-6">
-            <div class="glass-panel p-6 rounded-2xl">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="orbitron text-lg font-semibold flex items-center gap-2">
-                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
-                        SEMANTIC PROXY CONSOLE
-                    </h2>
-                    <span id="loop-status" class="text-[10px] orbitron px-2 py-1 rounded bg-slate-800 border border-slate-700">LOOP MONITORING: SAFE</span>
-                </div>
-                
-                <div class="relative">
-                    <textarea id="user-input" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 text-sm focus:outline-none focus:border-blue-500 transition-all h-32 placeholder-slate-600" placeholder="에이전트에게 내릴 명령을 입력하세요... (테스트를 위해 같은 말을 반복해보세요)"></textarea>
-                    <button onclick="processAI()" class="absolute bottom-4 right-4 bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-lg orbitron text-xs font-bold transition-all shadow-lg shadow-blue-900/20">
-                        EXECUTE
-                    </button>
-                </div>
-
-                <div id="log-container" class="mt-6 h-48 overflow-y-auto font-mono text-[11px] space-y-2 pr-2 custom-scrollbar">
-                    <div class="text-slate-500 italic">Aura 엔진이 대기 중입니다...</div>
+        <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-800 flex flex-col justify-between h-20">
+            <p class="text-[9px] text-slate-500 orbitron">SEMANTIC CACHE</p>
+            <div class="flex items-center justify-between">
+                <span class="text-[11px] font-medium">RECOVERY MODE</span>
+                <span class="flex h-2 w-2 rounded-full bg-blue-500"></span>
+            </div>
+            <div class="text-[9px] text-blue-400 opacity-70">HIT RATE: 82% Active</div>
+        </div>
+        <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-800 flex flex-col justify-between h-20">
+            <p class="text-[9px] text-slate-500 orbitron">TOKEN OPTIMIZER</p>
+            <div class="flex items-center justify-between">
+                <span class="text-[11px] font-medium">COMPRESSION</span>
+                <div class="flex gap-0.5">
+                    <span class="w-1 h-3 bg-blue-500/50 animate-[bounce_1s_infinite]"></span>
+                    <span class="w-1 h-3 bg-blue-500/50 animate-[bounce_1.2s_infinite]"></span>
+                    <span class="w-1 h-3 bg-blue-500/50 animate-[bounce_0.8s_infinite]"></span>
                 </div>
             </div>
+            <div class="text-[9px] text-blue-300 opacity-70">SAVED: 3,420 Tok</div>
         </div>
-
-        <div class="col-span-4 space-y-6">
-            <div class="glass-panel p-6 rounded-2xl border-l-4 border-l-blue-500">
-                <h3 class="orbitron text-xs text-slate-500 mb-4 tracking-widest uppercase">Token Efficiency</h3>
-                <div class="text-5xl orbitron font-bold neon-blue mb-2"><span id="saved-total">0</span>%</div>
-                <p class="text-[11px] text-slate-400">Semantic Cache Hit Rate: <span id="hit-rate">0%</span></p>
-                <div class="w-full bg-slate-800 h-1.5 rounded-full mt-4 overflow-hidden">
-                    <div id="progress-bar" class="bg-blue-500 h-full w-0 transition-all duration-1000"></div>
-                </div>
+        <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-800 flex flex-col justify-between h-20">
+            <p class="text-[9px] text-slate-500 orbitron">PRIVACY SHIELD</p>
+            <div class="flex items-center justify-between">
+                <span class="text-[11px] font-medium">DATA MASKING</span>
+                <svg class="w-3 h-3 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"/></svg>
             </div>
-
-            <div id="loop-card" class="glass-panel p-6 rounded-2xl transition-all duration-500">
-                <h3 class="orbitron text-xs text-slate-500 mb-4 tracking-widest uppercase">Loop Prevention</h3>
-                <div class="flex items-center justify-between">
-                    <div>
-                        <div id="loop-count" class="text-3xl orbitron font-bold">0/3</div>
-                        <div class="text-[10px] text-slate-500 mt-1 uppercase">Pattern Repetition</div>
-                    </div>
-                    <div id="loop-icon" class="p-3 rounded-full bg-slate-800 border border-slate-700">
-                        <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
-                    </div>
-                </div>
-                <div id="loop-msg" class="mt-4 text-[11px] leading-relaxed text-slate-400 font-light">에이전트의 반복적인 행동을 실시간으로 감시 중입니다.</div>
+            <div class="text-[9px] text-yellow-400 opacity-70">ENCRYPTION: AES-256</div>
+        </div>
+        <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-800 flex flex-col justify-between h-20">
+            <p class="text-[9px] text-slate-500 orbitron">COST GOVERNOR</p>
+            <div class="flex items-center justify-between">
+                <span class="text-[11px] font-medium">BUDGET LIMIT</span>
+                <span class="text-[10px] font-bold text-slate-400">72%</span>
+            </div>
+            <div class="w-full bg-slate-700 h-1 rounded-full overflow-hidden">
+                <div class="bg-orange-500 h-full w-[72%]"></div>
             </div>
         </div>
-    </main>
-
-    <script>
-        // 백엔드 시맨틱 로직 (핵심 엔진)
-        const SIMILARITY_THRESHOLD = 0.55;
-        const LOOP_THRESHOLD = 0.85; // 루프 감지는 더 엄격하게
-        let cacheStore = [];
-        let history = []; // 루프 감지용 최근 대화 저장
-        let stats = { requests: 0, hits: 0, savedTokens: 0, rawTokens: 0 };
-
-        // 간단한 토큰화 (전달해주신 코드 기반)
-        function tokenize(text) {
-            return text.toLowerCase().replace(/[^\w\s가-힣ㄱ-ㅎㅏ-ㅣ]/g, ' ').split(/\s+/).filter(t => t.length > 1);
-        }
-
-        // 코사인 유사도 (전달해주신 엔진 핵심 로직)
-        function getSimilarity(q1, q2) {
-            const v1 = buildVector(tokenize(q1));
-            const v2 = buildVector(tokenize(q2));
-            const keys = new Set([...Object.keys(v1), ...Object.keys(v2)]);
-            let dot = 0, mag1 = 0, mag2 = 0;
-            keys.forEach(k => {
-                const a = v1[k] || 0; const b = v2[k] || 0;
-                dot += a * b; mag1 += a * a; mag2 += b * b;
-            });
-            return dot / (Math.sqrt(mag1) * Math.sqrt(mag2)) || 0;
-        }
-
-        function buildVector(tokens) {
-            const v = {}; tokens.forEach(t => v[t] = (v[t] || 0) + 1);
-            return v;
-        }
-
-        function addLog(msg, type = 'info') {
-            const container = document.getElementById('log-container');
-            const time = new Date().toLocaleTimeString();
-            const colors = { info: 'text-slate-400', cache: 'text-green-400', loop: 'text-red-400 font-bold animate-pulse', proc: 'text-blue-400' };
-            const div = document.createElement('div');
-            div.className = `fade-in ${colors[type]}`;
-            div.innerHTML = `[${time}] ${msg}`;
-            container.prepend(div);
-        }
-
-        function processAI() {
-            const input = document.getElementById('user-input').value.trim();
-            if (!input) return;
-
-            stats.requests++;
-            addLog(`입력 수신: "${input.slice(0, 20)}..."`, 'proc');
-
-            // 1. 루프 감지 로직 (New!)
-            let loopCount = 0;
-            history.forEach(prev => {
-                if (getSimilarity(input, prev) > LOOP_THRESHOLD) loopCount++;
-            });
-            history.push(input);
-            if (history.length > 5) history.shift();
-
-            document.getElementById('loop-count').innerText = `${loopCount}/3`;
-            
-            if (loopCount >= 2) {
-                addLog(`[ALERT] AI 무한 루프 감지! (유사도 ${(getSimilarity(input, history[history.length-2])*100).toFixed(1)}%)`, 'loop');
-                triggerLoopAlert();
-                return;
-            } else {
-                resetLoopAlert();
-            }
-
-            // 2. 시맨틱 캐시 로직 (기존 엔진 연결)
-            let bestHit = null;
-            let maxSim = 0;
-            cacheStore.forEach(item => {
-                const sim = getSimilarity(input, item.query);
-                if (sim > maxSim) { maxSim = sim; bestHit = item; }
-            });
-
-            const rawTok = input.length; // 간단한 추정
-            stats.rawTokens += rawTok;
-
-            if (maxSim >= SIMILARITY_THRESHOLD) {
-                stats.hits++;
-                stats.savedTokens += rawTok;
-                addLog(`[CACHE] 적중! 유사도 ${(maxSim*100).toFixed(1)}% - 토큰 100% 절감`, 'cache');
-            } else {
-                cacheStore.push({ query: input, tokens: rawTok });
-                addLog(`[SERVER] 신규 쿼리 전송 (최적화 적용 중...)`, 'info');
-            }
-
-            updateStats();
-        }
-
-        function triggerLoopAlert() {
-            const card = document.getElementById('loop-card');
-            card.className = 'glass-panel p-6 rounded-2xl loop-alert border-2 border-red-500';
-            document.getElementById('loop-icon').innerHTML = '<svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>';
-            document.getElementById('loop-msg').innerHTML = '<span class="text-red-400 font-bold">위험: 에이전트가 동일한 행동을 반복하고 있습니다. 시스템 보호를 위해 가동을 중단합니다.</span>';
-            document.getElementById('loop-status').innerText = 'LOOP DETECTED: BLOCKED';
-            document.getElementById('loop-status').classList.add('text-red-500', 'border-red-500');
-        }
-
-        function resetLoopAlert() {
-            const card = document.getElementById('loop-card');
-            card.className = 'glass-panel p-6 rounded-2xl border-l-4 border-l-slate-700';
-            document.getElementById('loop-msg').innerText = '에이전트의 반복적인 행동을 실시간으로 감시 중입니다.';
-            document.getElementById('loop-status').innerText = 'LOOP MONITORING: SAFE';
-            document.getElementById('loop-status').className = 'text-[10px] orbitron px-2 py-1 rounded bg-slate-800 border border-slate-700';
-        }
-
-        function updateStats() {
-            const rate = stats.rawTokens > 0 ? (stats.savedTokens / stats.rawTokens * 100).toFixed(1) : 0;
-            document.getElementById('saved-total').innerText = rate;
-            document.getElementById('hit-rate').innerText = (stats.hits / stats.requests * 100).toFixed(1) + '%';
-            document.getElementById('progress-bar').style.width = rate + '%';
-        }
-    </script>
-</body>
-</html>
+        <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-800 flex flex-col justify-between h-20">
+            <p class="text-[9px] text-slate-500 orbitron">RESPONSE AUDITOR</p>
+            <div class="flex items-center justify-between">
+                <span class="text-[11px] font-medium">FACT CHECK</span>
+                <span class="w-2 h-2 border-2 border-blue-400 rounded-full animate-ping"></span>
+            </div>
+            <div class="text-[9px] text-blue-200 opacity-70">VERIFIED: 100%</div>
+        </div>
+    </div>
+    
+    <div class="absolute bottom-4 right-6 text-right">
+        <p class="text-[8px] text-slate-600 orbitron mb-0.5">SECURITY PROTOCOL</p>
+        <p class="text-sm font-bold text-blue-400 orbitron tracking-widest">MULTI-LAYERED PROTECTION ACTIVE</p>
+    </div>
+</div>
