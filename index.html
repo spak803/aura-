@@ -3,151 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURA AI | Intelligent Control Tower</title>
+    <title>AURA AI | Autonomous Agent Guard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+KR:wght@100;300;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+KR:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
-        body { background: radial-gradient(circle at center, #001233 0%, #000000 100%); color: #e0e0e0; font-family: 'Noto Sans KR', sans-serif; overflow: hidden; height: 100vh; }
+        body { background: #020617; color: #e2e8f0; font-family: 'Noto Sans KR', sans-serif; overflow-x: hidden; }
         .orbitron { font-family: 'Orbitron', sans-serif; }
-        .neon-text-blue { text-shadow: 0 0 10px #0077ff, 0 0 20px #0077ff; }
-        .neon-text-green { text-shadow: 0 0 10px #00ff77, 0 0 20px #00ff77; }
-        .neon-border { box-shadow: 0 0 15px rgba(0, 119, 255, 0.4); border: 1px solid rgba(0, 119, 255, 0.5); }
-        .panel { background: rgba(0, 10, 30, 0.85); backdrop-filter: blur(10px); border: 1px solid rgba(0, 119, 255, 0.3); }
-        #canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.3; }
-        
-        /* 팝업 및 대시보드 스위치 */
-        #popup, #desktop-ui { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 100; }
-        
-        /* 토글 스위치 스타일 */
-        .toggle-dot { transition: all 0.3s ease-in-out; }
-        input:checked ~ .toggle-dot { transform: translateX(100%); background-color: #0077ff; }
-
-        /* 에이전트 리스트 애니메이션 */
+        .neon-blue { text-shadow: 0 0 10px #3b82f6; color: #60a5fa; }
+        .neon-red { text-shadow: 0 0 10px #ef4444; color: #f87171; }
+        .glass-panel { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(59, 130, 246, 0.2); }
+        .loop-alert { animation: pulse-red 1.5s infinite; }
+        @keyframes pulse-red { 0%, 100% { background: rgba(239, 68, 68, 0.1); } 50% { background: rgba(239, 68, 68, 0.3); } }
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .agent-item { animation: fadeIn 0.5s ease-out forwards; opacity: 0; }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center">
+<body class="p-8">
 
-    <canvas id="canvas"></canvas>
+    <header class="max-w-6xl mx-auto flex justify-between items-end mb-10">
+        <div>
+            <h1 class="orbitron text-4xl font-bold tracking-tighter neon-blue">AURA AI <span class="text-sm font-light tracking-widest text-slate-500 ml-2">v2.1 CORE</span></h1>
+            <p class="text-slate-400 text-sm mt-2 font-light">Agentic Workflow Optimization & Loop Prevention</p>
+        </div>
+        <div class="text-right">
+            <div class="text-xs orbitron text-blue-500 mb-1">NETWORK STATUS</div>
+            <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                <span class="orbitron text-sm">OPTIMIZATION ACTIVE</span>
+            </div>
+        </div>
+    </header>
 
-    <main id="main-view" class="text-center z-10 transition-opacity duration-500">
-        <header class="mb-16">
-            <h1 class="orbitron text-6xl font-bold tracking-[0.5em] neon-text-blue mb-4">AURA AI</h1>
-            <p class="text-blue-300 opacity-70 tracking-widest uppercase text-sm">Intelligent Agentic Traffic Control</p>
-        </header>
+    <main class="max-w-6xl mx-auto grid grid-cols-12 gap-6">
+        
+        <div class="col-span-8 space-y-6">
+            <div class="glass-panel p-6 rounded-2xl">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="orbitron text-lg font-semibold flex items-center gap-2">
+                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                        SEMANTIC PROXY CONSOLE
+                    </h2>
+                    <span id="loop-status" class="text-[10px] orbitron px-2 py-1 rounded bg-slate-800 border border-slate-700">LOOP MONITORING: SAFE</span>
+                </div>
+                
+                <div class="relative">
+                    <textarea id="user-input" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 text-sm focus:outline-none focus:border-blue-500 transition-all h-32 placeholder-slate-600" placeholder="에이전트에게 내릴 명령을 입력하세요... (테스트를 위해 같은 말을 반복해보세요)"></textarea>
+                    <button onclick="processAI()" class="absolute bottom-4 right-4 bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-lg orbitron text-xs font-bold transition-all shadow-lg shadow-blue-900/20">
+                        EXECUTE
+                    </button>
+                </div>
 
-        <div class="panel p-20 rounded-3xl neon-border relative">
-            <div class="absolute top-4 right-6 text-xs orbitron text-green-400 animate-pulse">● Smart Filtering Active</div>
-            <h2 class="orbitron text-2xl mb-10 text-blue-400 tracking-wider">AVERAGE TOKEN SAVED</h2>
-            <div class="text-9xl orbitron font-bold mb-14 neon-text-blue">74<span class="text-3xl text-blue-500">%</span></div>
-            
-            <button onclick="openPopup()" class="bg-blue-600 hover:bg-blue-500 text-white orbitron px-16 py-6 rounded-full text-xl transition-all tracking-widest shadow-[0_0_30px_rgba(0,119,255,0.6)]">
-                HIRE AURA AGENT
-            </button>
+                <div id="log-container" class="mt-6 h-48 overflow-y-auto font-mono text-[11px] space-y-2 pr-2 custom-scrollbar">
+                    <div class="text-slate-500 italic">Aura 엔진이 대기 중입니다...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-span-4 space-y-6">
+            <div class="glass-panel p-6 rounded-2xl border-l-4 border-l-blue-500">
+                <h3 class="orbitron text-xs text-slate-500 mb-4 tracking-widest uppercase">Token Efficiency</h3>
+                <div class="text-5xl orbitron font-bold neon-blue mb-2"><span id="saved-total">0</span>%</div>
+                <p class="text-[11px] text-slate-400">Semantic Cache Hit Rate: <span id="hit-rate">0%</span></p>
+                <div class="w-full bg-slate-800 h-1.5 rounded-full mt-4 overflow-hidden">
+                    <div id="progress-bar" class="bg-blue-500 h-full w-0 transition-all duration-1000"></div>
+                </div>
+            </div>
+
+            <div id="loop-card" class="glass-panel p-6 rounded-2xl transition-all duration-500">
+                <h3 class="orbitron text-xs text-slate-500 mb-4 tracking-widest uppercase">Loop Prevention</h3>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div id="loop-count" class="text-3xl orbitron font-bold">0/3</div>
+                        <div class="text-[10px] text-slate-500 mt-1 uppercase">Pattern Repetition</div>
+                    </div>
+                    <div id="loop-icon" class="p-3 rounded-full bg-slate-800 border border-slate-700">
+                        <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                    </div>
+                </div>
+                <div id="loop-msg" class="mt-4 text-[11px] leading-relaxed text-slate-400 font-light">에이전트의 반복적인 행동을 실시간으로 감시 중입니다.</div>
+            </div>
         </div>
     </main>
 
-    <div id="popup" class="panel p-10 rounded-2xl w-[450px] neon-border">
-        <h3 class="orbitron text-2xl mb-8 text-center text-blue-400 tracking-tight">AGENT DEPLOYMENT</h3>
-        <p class="text-base mb-10 text-center opacity-80 leading-relaxed">이 시스템에 Aura 관제 엔진을 상주시킬까요?<br>유료 토큰 통신을 즉시 식별하여 가위질합니다.</p>
-        
-        <div class="flex items-center justify-between mb-10 bg-black bg-opacity-40 p-5 rounded-xl border border-blue-900">
-            <span class="text-sm text-blue-100 font-medium">컴퓨터 시작 시 자동 작동 (권장)</span>
-            <label class="flex items-center cursor-pointer">
-                <div class="relative">
-                    <input type="checkbox" id="auto-start" class="sr-only" checked>
-                    <div class="block bg-gray-700 w-12 h-7 rounded-full"></div>
-                    <div class="toggle-dot absolute left-1 top-1 bg-white w-5 h-5 rounded-full"></div>
-                </div>
-            </label>
-        </div>
-
-        <button onclick="hireSuccess()" class="w-full bg-blue-700 py-4 rounded-lg orbitron text-lg tracking-widest hover:bg-blue-600 transition-colors shadow-lg">
-            CONFIRM HIRE
-        </button>
-        <button onclick="closePopup()" class="w-full mt-5 text-sm opacity-50 hover:opacity-100 underline">CANCEL</button>
-    </div>
-
-    <div id="desktop-ui" class="panel p-10 rounded-2xl neon-border w-[700px]">
-        <div class="flex justify-between items-center mb-10 border-b border-blue-900 pb-6">
-            <div class="flex items-center">
-                <img src="https://img.icons8.com/fluency/48/000000/cpu.png" class="w-8 h-8 mr-3"/>
-                <span class="orbitron text-2xl text-blue-400 font-bold">AURA DASHBOARD</span>
-            </div>
-            <button onclick="location.reload()" class="text-sm opacity-60 hover:opacity-100 hover:text-red-400">[ X ] CLOSE</button>
-        </div>
-        
-        <div id="agent-list" class="space-y-5 h-[350px] overflow-y-auto pr-2">
-            </div>
-        
-        <div class="mt-10 pt-6 border-t border-blue-900 text-center">
-            <p class="text-xs text-blue-500 orbitron tracking-widest uppercase">
-                Monitoring NPU & Network Traffic for <span class="text-white font-bold">32 Active Processes</span>
-            </p>
-        </div>
-    </div>
-
     <script>
-        function openPopup() { document.getElementById('popup').style.display = 'block'; }
-        function closePopup() { document.getElementById('popup').style.display = 'none'; }
-        
-        // 고용 성공 시 시뮬레이션 데이터
-        const agentsData = [
-            { name: "GPT-4o Research Agent", path: "EXTERNAL", saved: "76%", icon: "🌐" },
-            { name: "Samsung Photo Editor (On-Device)", path: "INTERNAL", saved: "Optimized", icon: "📱" },
-            { name: "Claude-3 Opus Copilot", path: "EXTERNAL", saved: "81%", icon: "🌐" },
-            { name: "Local Llama-3 (NPU Process)", path: "INTERNAL", saved: "Optimized", icon: "💻" },
-            { name: "Adobe Firefly (Cloud Sync)", path: "EXTERNAL", saved: "55%", icon: "🌐" }
-        ];
+        // 백엔드 시맨틱 로직 (핵심 엔진)
+        const SIMILARITY_THRESHOLD = 0.55;
+        const LOOP_THRESHOLD = 0.85; // 루프 감지는 더 엄격하게
+        let cacheStore = [];
+        let history = []; // 루프 감지용 최근 대화 저장
+        let stats = { requests: 0, hits: 0, savedTokens: 0, rawTokens: 0 };
 
-        function hireSuccess() {
-            document.getElementById('popup').style.display = 'none';
-            document.getElementById('main-view').style.opacity = '0.1';
-            document.getElementById('desktop-ui').style.display = 'block';
-            
-            const listContainer = document.getElementById('agent-list');
-            listContainer.innerHTML = ''; // 초기화
-
-            // 리스트 동적 생성 (애니메이션 효과)
-            agentsData.forEach((agent, index) => {
-                setTimeout(() => {
-                    const isInternal = agent.path === "INTERNAL";
-                    const pathClass = isInternal ? "text-green-400 border-green-900" : "text-blue-400 border-blue-900";
-                    const savedClass = isInternal ? "text-green-300 neon-text-green" : "text-blue-300 neon-text-blue";
-                    const statusDot = isInternal ? "bg-green-500" : "bg-blue-500 animate-pulse";
-
-                    const item = `
-                        <div class="agent-item flex justify-between items-center bg-black bg-opacity-50 p-5 rounded-xl border ${isInternal ? 'border-green-900' : 'border-blue-900'}">
-                            <div class="flex items-center space-x-4">
-                                <span class="text-2xl">${agent.icon}</span>
-                                <div>
-                                    <div class="text-base font-bold text-white">${agent.name}</div>
-                                    <div class="text-xs orbitron ${pathClass} tracking-wider mt-1">[ ${agent.path} ]</div>
-                                </div>
-                            </div>
-                            <div class="text-right flex items-center space-x-4">
-                                <div class="w-2.5 h-2.5 ${statusDot} rounded-full"></div>
-                                <span class="orbitron ${savedClass} text-lg font-bold w-32 text-center">${agent.saved}</span>
-                            </div>
-                        </div>
-                    `;
-                    listContainer.innerHTML += item;
-                }, index * 300); // 0.3초 간격으로 등장
-            });
-
-            setTimeout(() => {
-                alert('Aura AI가 시스템 관제를 시작했습니다.\n온디바이스 AI는 성능을 보호하며, 클라우드 AI는 비용을 절감합니다.');
-            }, agentsData.length * 300 + 500);
+        // 간단한 토큰화 (전달해주신 코드 기반)
+        function tokenize(text) {
+            return text.toLowerCase().replace(/[^\w\s가-힣ㄱ-ㅎㅏ-ㅣ]/g, ' ').split(/\s+/).filter(t => t.length > 1);
         }
 
-        // 배경 신경망 애니메이션 (동일)
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        function init() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; particles = []; for(let i=0; i<60; i++) particles.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx:(Math.random()-0.5)*0.5, vy:(Math.random()-0.5)*0.5 }); }
-        function draw() { ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle = '#0077ff'; particles.forEach((p,i)=>{ p.x+=p.vx; p.y+=p.vy; if(p.x<0||p.x>canvas.width) p.vx*=-1; if(p.y<0||p.y>canvas.height) p.vy*=-1; ctx.beginPath(); ctx.arc(p.x,p.y,1,0,Math.PI*2); ctx.fill(); for(let j=i+1;j<particles.length;j++){ const p2=particles[j]; const dist=Math.hypot(p.x-p2.x,p.y-p2.y); if(dist<150){ ctx.strokeStyle=`rgba(0,119,255,${1-dist/150})`; ctx.lineWidth=0.5; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(p2.x,p2.y); ctx.stroke(); } } }); requestAnimationFrame(draw); }
-        init(); draw(); window.onresize = init;
+        // 코사인 유사도 (전달해주신 엔진 핵심 로직)
+        function getSimilarity(q1, q2) {
+            const v1 = buildVector(tokenize(q1));
+            const v2 = buildVector(tokenize(q2));
+            const keys = new Set([...Object.keys(v1), ...Object.keys(v2)]);
+            let dot = 0, mag1 = 0, mag2 = 0;
+            keys.forEach(k => {
+                const a = v1[k] || 0; const b = v2[k] || 0;
+                dot += a * b; mag1 += a * a; mag2 += b * b;
+            });
+            return dot / (Math.sqrt(mag1) * Math.sqrt(mag2)) || 0;
+        }
+
+        function buildVector(tokens) {
+            const v = {}; tokens.forEach(t => v[t] = (v[t] || 0) + 1);
+            return v;
+        }
+
+        function addLog(msg, type = 'info') {
+            const container = document.getElementById('log-container');
+            const time = new Date().toLocaleTimeString();
+            const colors = { info: 'text-slate-400', cache: 'text-green-400', loop: 'text-red-400 font-bold animate-pulse', proc: 'text-blue-400' };
+            const div = document.createElement('div');
+            div.className = `fade-in ${colors[type]}`;
+            div.innerHTML = `[${time}] ${msg}`;
+            container.prepend(div);
+        }
+
+        function processAI() {
+            const input = document.getElementById('user-input').value.trim();
+            if (!input) return;
+
+            stats.requests++;
+            addLog(`입력 수신: "${input.slice(0, 20)}..."`, 'proc');
+
+            // 1. 루프 감지 로직 (New!)
+            let loopCount = 0;
+            history.forEach(prev => {
+                if (getSimilarity(input, prev) > LOOP_THRESHOLD) loopCount++;
+            });
+            history.push(input);
+            if (history.length > 5) history.shift();
+
+            document.getElementById('loop-count').innerText = `${loopCount}/3`;
+            
+            if (loopCount >= 2) {
+                addLog(`[ALERT] AI 무한 루프 감지! (유사도 ${(getSimilarity(input, history[history.length-2])*100).toFixed(1)}%)`, 'loop');
+                triggerLoopAlert();
+                return;
+            } else {
+                resetLoopAlert();
+            }
+
+            // 2. 시맨틱 캐시 로직 (기존 엔진 연결)
+            let bestHit = null;
+            let maxSim = 0;
+            cacheStore.forEach(item => {
+                const sim = getSimilarity(input, item.query);
+                if (sim > maxSim) { maxSim = sim; bestHit = item; }
+            });
+
+            const rawTok = input.length; // 간단한 추정
+            stats.rawTokens += rawTok;
+
+            if (maxSim >= SIMILARITY_THRESHOLD) {
+                stats.hits++;
+                stats.savedTokens += rawTok;
+                addLog(`[CACHE] 적중! 유사도 ${(maxSim*100).toFixed(1)}% - 토큰 100% 절감`, 'cache');
+            } else {
+                cacheStore.push({ query: input, tokens: rawTok });
+                addLog(`[SERVER] 신규 쿼리 전송 (최적화 적용 중...)`, 'info');
+            }
+
+            updateStats();
+        }
+
+        function triggerLoopAlert() {
+            const card = document.getElementById('loop-card');
+            card.className = 'glass-panel p-6 rounded-2xl loop-alert border-2 border-red-500';
+            document.getElementById('loop-icon').innerHTML = '<svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>';
+            document.getElementById('loop-msg').innerHTML = '<span class="text-red-400 font-bold">위험: 에이전트가 동일한 행동을 반복하고 있습니다. 시스템 보호를 위해 가동을 중단합니다.</span>';
+            document.getElementById('loop-status').innerText = 'LOOP DETECTED: BLOCKED';
+            document.getElementById('loop-status').classList.add('text-red-500', 'border-red-500');
+        }
+
+        function resetLoopAlert() {
+            const card = document.getElementById('loop-card');
+            card.className = 'glass-panel p-6 rounded-2xl border-l-4 border-l-slate-700';
+            document.getElementById('loop-msg').innerText = '에이전트의 반복적인 행동을 실시간으로 감시 중입니다.';
+            document.getElementById('loop-status').innerText = 'LOOP MONITORING: SAFE';
+            document.getElementById('loop-status').className = 'text-[10px] orbitron px-2 py-1 rounded bg-slate-800 border border-slate-700';
+        }
+
+        function updateStats() {
+            const rate = stats.rawTokens > 0 ? (stats.savedTokens / stats.rawTokens * 100).toFixed(1) : 0;
+            document.getElementById('saved-total').innerText = rate;
+            document.getElementById('hit-rate').innerText = (stats.hits / stats.requests * 100).toFixed(1) + '%';
+            document.getElementById('progress-bar').style.width = rate + '%';
+        }
     </script>
 </body>
 </html>
