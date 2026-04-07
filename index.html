@@ -3,131 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURA AI | Control Tower</title>
+    <title>AURA AI | Intelligent Control Tower</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+KR:wght@100;300;500&display=swap" rel="stylesheet">
     <style>
         body { background: radial-gradient(circle at center, #001233 0%, #000000 100%); color: #e0e0e0; font-family: 'Noto Sans KR', sans-serif; overflow: hidden; height: 100vh; }
         .orbitron { font-family: 'Orbitron', sans-serif; }
-        .neon-text { text-shadow: 0 0 10px #0077ff, 0 0 20px #0077ff; }
+        .neon-text-blue { text-shadow: 0 0 10px #0077ff, 0 0 20px #0077ff; }
+        .neon-text-green { text-shadow: 0 0 10px #00ff77, 0 0 20px #00ff77; }
         .neon-border { box-shadow: 0 0 15px rgba(0, 119, 255, 0.4); border: 1px solid rgba(0, 119, 255, 0.5); }
-        .panel { background: rgba(0, 10, 30, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(0, 119, 255, 0.3); }
-        #canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.4; }
+        .panel { background: rgba(0, 10, 30, 0.85); backdrop-filter: blur(10px); border: 1px solid rgba(0, 119, 255, 0.3); }
+        #canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.3; }
         
-        /* 팝업 스타일 */
-        #popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 100; }
-        #desktop-ui { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 110; width: 600px; }
+        /* 팝업 및 대시보드 스위치 */
+        #popup, #desktop-ui { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 100; }
         
+        /* 토글 스위치 스타일 */
         .toggle-dot { transition: all 0.3s ease-in-out; }
         input:checked ~ .toggle-dot { transform: translateX(100%); background-color: #0077ff; }
+
+        /* 에이전트 리스트 애니메이션 */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .agent-item { animation: fadeIn 0.5s ease-out forwards; opacity: 0; }
     </style>
 </head>
 <body class="flex flex-col items-center justify-center">
 
     <canvas id="canvas"></canvas>
 
-    <main id="main-view" class="text-center z-10">
-        <header class="mb-12">
-            <h1 class="orbitron text-5xl font-bold tracking-[0.5em] neon-text mb-4">AURA AI</h1>
-            <p class="text-blue-300 opacity-70 tracking-widest uppercase text-xs">The Gateway to Agentic Era</p>
+    <main id="main-view" class="text-center z-10 transition-opacity duration-500">
+        <header class="mb-16">
+            <h1 class="orbitron text-6xl font-bold tracking-[0.5em] neon-text-blue mb-4">AURA AI</h1>
+            <p class="text-blue-300 opacity-70 tracking-widest uppercase text-sm">Intelligent Agentic Traffic Control</p>
         </header>
 
-        <div class="panel p-16 rounded-3xl neon-border">
-            <h2 class="orbitron text-xl mb-8 text-blue-400">CORE OPTIMIZER ENGINE</h2>
-            <div class="text-8xl orbitron font-bold mb-12 neon-text">74<span class="text-2xl text-blue-500">%</span></div>
+        <div class="panel p-20 rounded-3xl neon-border relative">
+            <div class="absolute top-4 right-6 text-xs orbitron text-green-400 animate-pulse">● Smart Filtering Active</div>
+            <h2 class="orbitron text-2xl mb-10 text-blue-400 tracking-wider">AVERAGE TOKEN SAVED</h2>
+            <div class="text-9xl orbitron font-bold mb-14 neon-text-blue">74<span class="text-3xl text-blue-500">%</span></div>
             
-            <button onclick="openPopup()" class="bg-blue-600 hover:bg-blue-500 text-white orbitron px-12 py-5 rounded-full text-lg transition-all tracking-widest shadow-[0_0_20px_rgba(0,119,255,0.5)]">
+            <button onclick="openPopup()" class="bg-blue-600 hover:bg-blue-500 text-white orbitron px-16 py-6 rounded-full text-xl transition-all tracking-widest shadow-[0_0_30px_rgba(0,119,255,0.6)]">
                 HIRE AURA AGENT
             </button>
         </div>
     </main>
 
-    <div id="popup" class="panel p-8 rounded-2xl w-96 neon-border">
-        <h3 class="orbitron text-xl mb-6 text-center text-blue-400">HIRE AGENT</h3>
-        <p class="text-sm mb-8 text-center opacity-80">이 에이전트를 시스템에 상주시킬까요?<br>토큰 비용을 즉시 가위질하기 시작합니다.</p>
+    <div id="popup" class="panel p-10 rounded-2xl w-[450px] neon-border">
+        <h3 class="orbitron text-2xl mb-8 text-center text-blue-400 tracking-tight">AGENT DEPLOYMENT</h3>
+        <p class="text-base mb-10 text-center opacity-80 leading-relaxed">이 시스템에 Aura 관제 엔진을 상주시킬까요?<br>유료 토큰 통신을 즉시 식별하여 가위질합니다.</p>
         
-        <div class="flex items-center justify-between mb-8 px-4">
-            <span class="text-xs text-blue-200">컴퓨터 시작 시 자동 작동</span>
+        <div class="flex items-center justify-between mb-10 bg-black bg-opacity-40 p-5 rounded-xl border border-blue-900">
+            <span class="text-sm text-blue-100 font-medium">컴퓨터 시작 시 자동 작동 (권장)</span>
             <label class="flex items-center cursor-pointer">
                 <div class="relative">
                     <input type="checkbox" id="auto-start" class="sr-only" checked>
-                    <div class="block bg-gray-700 w-10 h-6 rounded-full"></div>
-                    <div class="toggle-dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full"></div>
+                    <div class="block bg-gray-700 w-12 h-7 rounded-full"></div>
+                    <div class="toggle-dot absolute left-1 top-1 bg-white w-5 h-5 rounded-full"></div>
                 </div>
             </label>
         </div>
 
-        <button onclick="hireSuccess()" class="w-full bg-blue-700 py-3 rounded-lg orbitron tracking-widest hover:bg-blue-600 transition-colors">
+        <button onclick="hireSuccess()" class="w-full bg-blue-700 py-4 rounded-lg orbitron text-lg tracking-widest hover:bg-blue-600 transition-colors shadow-lg">
             CONFIRM HIRE
         </button>
-        <button onclick="closePopup()" class="w-full mt-4 text-xs opacity-50 hover:opacity-100 underline">CANCEL</button>
+        <button onclick="closePopup()" class="w-full mt-5 text-sm opacity-50 hover:opacity-100 underline">CANCEL</button>
     </div>
 
-    <div id="desktop-ui" class="panel p-8 rounded-2xl neon-border">
-        <div class="flex justify-between items-center mb-8 border-b border-blue-900 pb-4">
-            <span class="orbitron text-blue-400">AURA DASHBOARD v1.0</span>
-            <button onclick="location.reload()" class="text-xs opacity-50">CLOSE</button>
+    <div id="desktop-ui" class="panel p-10 rounded-2xl neon-border w-[700px]">
+        <div class="flex justify-between items-center mb-10 border-b border-blue-900 pb-6">
+            <div class="flex items-center">
+                <img src="https://img.icons8.com/fluency/48/000000/cpu.png" class="w-8 h-8 mr-3"/>
+                <span class="orbitron text-2xl text-blue-400 font-bold">AURA DASHBOARD</span>
+            </div>
+            <button onclick="location.reload()" class="text-sm opacity-60 hover:opacity-100 hover:text-red-400">[ X ] CLOSE</button>
         </div>
         
-        <div class="space-y-4">
-            <div class="flex justify-between items-center bg-black bg-opacity-40 p-4 rounded-lg">
-                <div class="flex items-center">
-                    <div class="w-2 h-2 bg-green-500 rounded-full mr-3 animate-pulse"></div>
-                    <span class="text-sm font-bold">Python Auto-Bot</span>
-                </div>
-                <span class="orbitron text-blue-400 text-sm">62% SAVED</span>
+        <div id="agent-list" class="space-y-5 h-[350px] overflow-y-auto pr-2">
             </div>
-            <div class="flex justify-between items-center bg-black bg-opacity-40 p-4 rounded-lg">
-                <div class="flex items-center">
-                    <div class="w-2 h-2 bg-green-500 rounded-full mr-3 animate-pulse"></div>
-                    <span class="text-sm font-bold">Customer Support AI</span>
-                </div>
-                <span class="orbitron text-blue-400 text-sm">81% SAVED</span>
-            </div>
-            <div class="flex justify-between items-center bg-black bg-opacity-40 p-4 rounded-lg opacity-40">
-                <div class="flex items-center">
-                    <div class="w-2 h-2 bg-gray-500 rounded-full mr-3"></div>
-                    <span class="text-sm font-bold">Data Analyzer</span>
-                </div>
-                <span class="orbitron text-xs">OFFLINE</span>
-            </div>
-        </div>
         
-        <p class="mt-8 text-[10px] text-center opacity-40 orbitron">MONITORING 24 ACTIVE AGENTS IN THIS SYSTEM</p>
+        <div class="mt-10 pt-6 border-t border-blue-900 text-center">
+            <p class="text-xs text-blue-500 orbitron tracking-widest uppercase">
+                Monitoring NPU & Network Traffic for <span class="text-white font-bold">32 Active Processes</span>
+            </p>
+        </div>
     </div>
 
     <script>
         function openPopup() { document.getElementById('popup').style.display = 'block'; }
         function closePopup() { document.getElementById('popup').style.display = 'none'; }
+        
+        // 고용 성공 시 시뮬레이션 데이터
+        const agentsData = [
+            { name: "GPT-4o Research Agent", path: "EXTERNAL", saved: "76%", icon: "🌐" },
+            { name: "Samsung Photo Editor (On-Device)", path: "INTERNAL", saved: "Optimized", icon: "📱" },
+            { name: "Claude-3 Opus Copilot", path: "EXTERNAL", saved: "81%", icon: "🌐" },
+            { name: "Local Llama-3 (NPU Process)", path: "INTERNAL", saved: "Optimized", icon: "💻" },
+            { name: "Adobe Firefly (Cloud Sync)", path: "EXTERNAL", saved: "55%", icon: "🌐" }
+        ];
+
         function hireSuccess() {
             document.getElementById('popup').style.display = 'none';
-            document.getElementById('main-view').style.opacity = '0.2';
+            document.getElementById('main-view').style.opacity = '0.1';
             document.getElementById('desktop-ui').style.display = 'block';
-            alert('바탕화면에 Aura AI 아이콘이 생성되었습니다.\n실제 시스템 관제를 시작합니다.');
+            
+            const listContainer = document.getElementById('agent-list');
+            listContainer.innerHTML = ''; // 초기화
+
+            // 리스트 동적 생성 (애니메이션 효과)
+            agentsData.forEach((agent, index) => {
+                setTimeout(() => {
+                    const isInternal = agent.path === "INTERNAL";
+                    const pathClass = isInternal ? "text-green-400 border-green-900" : "text-blue-400 border-blue-900";
+                    const savedClass = isInternal ? "text-green-300 neon-text-green" : "text-blue-300 neon-text-blue";
+                    const statusDot = isInternal ? "bg-green-500" : "bg-blue-500 animate-pulse";
+
+                    const item = `
+                        <div class="agent-item flex justify-between items-center bg-black bg-opacity-50 p-5 rounded-xl border ${isInternal ? 'border-green-900' : 'border-blue-900'}">
+                            <div class="flex items-center space-x-4">
+                                <span class="text-2xl">${agent.icon}</span>
+                                <div>
+                                    <div class="text-base font-bold text-white">${agent.name}</div>
+                                    <div class="text-xs orbitron ${pathClass} tracking-wider mt-1">[ ${agent.path} ]</div>
+                                </div>
+                            </div>
+                            <div class="text-right flex items-center space-x-4">
+                                <div class="w-2.5 h-2.5 ${statusDot} rounded-full"></div>
+                                <span class="orbitron ${savedClass} text-lg font-bold w-32 text-center">${agent.saved}</span>
+                            </div>
+                        </div>
+                    `;
+                    listContainer.innerHTML += item;
+                }, index * 300); // 0.3초 간격으로 등장
+            });
+
+            setTimeout(() => {
+                alert('Aura AI가 시스템 관제를 시작했습니다.\n온디바이스 AI는 성능을 보호하며, 클라우드 AI는 비용을 절감합니다.');
+            }, agentsData.length * 300 + 500);
         }
 
         // 배경 신경망 애니메이션 (동일)
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        function init() {
-            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            particles = [];
-            for(let i=0; i<50; i++) particles.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx:(Math.random()-0.5)*0.5, vy:(Math.random()-0.5)*0.5 });
-        }
-        function draw() {
-            ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle = '#0077ff';
-            particles.forEach((p,i)=>{
-                p.x+=p.vx; p.y+=p.vy;
-                if(p.x<0||p.x>canvas.width) p.vx*=-1; if(p.y<0||p.y>canvas.height) p.vy*=-1;
-                ctx.beginPath(); ctx.arc(p.x,p.y,1,0,Math.PI*2); ctx.fill();
-                for(let j=i+1;j<particles.length;j++){
-                    const p2=particles[j]; const dist=Math.hypot(p.x-p2.x,p.y-p2.y);
-                    if(dist<150){ ctx.strokeStyle=`rgba(0,119,255,${1-dist/150})`; ctx.lineWidth=0.5; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(p2.x,p2.y); ctx.stroke(); }
-                }
-            });
-            requestAnimationFrame(draw);
-        }
+        function init() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; particles = []; for(let i=0; i<60; i++) particles.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx:(Math.random()-0.5)*0.5, vy:(Math.random()-0.5)*0.5 }); }
+        function draw() { ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle = '#0077ff'; particles.forEach((p,i)=>{ p.x+=p.vx; p.y+=p.vy; if(p.x<0||p.x>canvas.width) p.vx*=-1; if(p.y<0||p.y>canvas.height) p.vy*=-1; ctx.beginPath(); ctx.arc(p.x,p.y,1,0,Math.PI*2); ctx.fill(); for(let j=i+1;j<particles.length;j++){ const p2=particles[j]; const dist=Math.hypot(p.x-p2.x,p.y-p2.y); if(dist<150){ ctx.strokeStyle=`rgba(0,119,255,${1-dist/150})`; ctx.lineWidth=0.5; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(p2.x,p2.y); ctx.stroke(); } } }); requestAnimationFrame(draw); }
         init(); draw(); window.onresize = init;
     </script>
 </body>
