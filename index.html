@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURA AI | Agentic Era Gateway</title>
+    <title>AURA AI | Control Tower</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+KR:wght@300;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+KR:wght@100;300;500&display=swap" rel="stylesheet">
     <style>
         body {
             background: radial-gradient(circle at center, #001233 0%, #000000 100%);
@@ -16,64 +16,65 @@
         }
         .orbitron { font-family: 'Orbitron', sans-serif; }
         
-        /* 네온 효과 */
+        /* 네온 및 하이테크 효과 */
         .neon-text { text-shadow: 0 0 10px #0077ff, 0 0 20px #0077ff; }
         .neon-border { box-shadow: 0 0 15px rgba(0, 119, 255, 0.4); border: 1px solid rgba(0, 119, 255, 0.5); }
+        .panel { background: rgba(0, 10, 30, 0.6); backdrop-filter: blur(5px); border: 1px solid rgba(0, 119, 255, 0.2); }
 
-        /* 배경 노드 애니메이션 */
-        #canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.4; }
+        /* 배경 신경망 애니메이션 */
+        #canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.5; }
 
-        /* 게이지 애니메이션 */
-        @keyframes fill {
-            from { stroke-dashoffset: 440; }
-            to { stroke-dashoffset: 110; } /* 75% 절감 지점 */
+        /* 스캔 라인 효과 */
+        .scanline {
+            width: 100%; height: 2px;
+            background: rgba(0, 119, 255, 0.2);
+            position: fixed; top: 0; left: 0;
+            z-index: 50; pointer-events: none;
+            animation: scan 3s linear infinite;
         }
-        .circle-progress {
-            stroke-dasharray: 440;
-            stroke-dashoffset: 440;
-            transition: stroke-dashoffset 2s ease-out;
-        }
+        @keyframes scan { from { top: -2px; } to { top: 100vh; } }
+
     </style>
 </head>
 <body class="flex flex-col items-center justify-center">
 
     <canvas id="canvas"></canvas>
+    <div class="scanline"></div>
 
-    <header class="fixed top-8 w-full px-12 flex justify-between items-center">
-        <div class="orbitron text-2xl font-bold tracking-widest neon-text">AURAAI.KR</div>
-        <div class="text-xs orbitron tracking-tighter text-blue-400 opacity-70">SYSTEM STATUS: OPTIMIZING...</div>
+    <header class="fixed top-8 w-full px-12 flex justify-between items-center z-50">
+        <div class="orbitron text-3xl font-bold tracking-widest neon-text">AURA AI</div>
+        <div class="text-xs orbitron tracking-tighter text-blue-400 opacity-70">
+            SYSTEM STATUS: <span class="text-green-400 neon-text">ACTIVE / OPTIMIZING</span>
+        </div>
     </header>
 
-    <main class="text-center z-10">
-        <h2 class="orbitron text-sm tracking-[0.3em] mb-4 text-blue-300 opacity-80 uppercase">Token Pruning Efficiency</h2>
-        
-        <div class="relative flex items-center justify-center mb-8">
-            <svg class="w-64 h-64 transform -rotate-90">
-                <circle cx="128" cy="128" r="70" stroke="currentColor" stroke-width="8" fill="transparent" class="text-gray-800" />
-                <circle id="gauge" cx="128" cy="128" r="70" stroke="#0077ff" stroke-width="8" fill="transparent" 
-                        stroke-linecap="round" class="circle-progress" />
-            </svg>
-            <div class="absolute flex flex-col items-center">
-                <span id="percent" class="orbitron text-6xl font-bold neon-text">0</span>
-                <span class="orbitron text-xl text-blue-400">%</span>
+    <main class="text-center z-10 w-full max-w-4xl px-4">
+        <div class="panel neon-border p-12 rounded-3xl mb-12 relative overflow-hidden">
+            <h2 class="orbitron text-xl tracking-[0.3em] mb-12 text-blue-300 opacity-80 uppercase">Token Pruning Efficiency</h2>
+            
+            <div class="relative flex items-center justify-center mb-8">
+                <div class="flex flex-col items-center">
+                    <span id="percent" class="orbitron text-9xl font-bold neon-text">0</span>
+                    <span class="orbitron text-2xl text-blue-400 mt-2 tracking-widest">%</span>
+                </div>
             </div>
-        </div>
 
-        <p class="text-lg font-light tracking-wide mb-12">
-            수십 개의 AI 에이전트를 위한 <span class="font-bold text-blue-400">지능형 토큰 관제 플랫폼</span>
-        </p>
+            <p class="text-xl font-light tracking-wide mb-12 opacity-90">
+                수십 개의 AI 에이전트를 위한 <span class="font-bold text-blue-400">지능형 토큰 관제 플랫폼</span>
+            </p>
 
-        <div class="neon-border bg-black bg-opacity-50 p-1 rounded-full flex max-w-md mx-auto">
-            <input type="email" placeholder="이메일을 입력하고 선점하세요" 
-                   class="bg-transparent px-6 py-3 w-full focus:outline-none text-sm">
-            <button onclick="alert('사전 예약이 완료되었습니다. 순차적으로 연락드리겠습니다.')"
-                    class="bg-blue-600 hover:bg-blue-500 text-white orbitron px-8 py-3 rounded-full text-xs transition-all tracking-widest">
-                PRE-ORDER
-            </button>
+            <div class="bg-black bg-opacity-70 p-1 rounded-full flex max-w-md mx-auto neon-border">
+                <input type="email" placeholder="이메일을 입력하고 선점하세요" 
+                       class="bg-transparent px-6 py-3 w-full focus:outline-none text-sm placeholder:opacity-50">
+                <button onclick="alert('사전 예약이 완료되었습니다. 순차적으로 연락드리겠습니다.')"
+                        class="bg-blue-600 hover:bg-blue-500 text-white orbitron px-10 py-3 rounded-full text-xs transition-all tracking-widest">
+                    PRE-ORDER
+                </button>
+            </div>
         </div>
     </main>
 
-    <footer class="fixed bottom-8 text-[10px] orbitron text-blue-500 opacity-50 tracking-widest uppercase text-center w-full">
+    <footer class="fixed bottom-8 text-[11px] orbitron text-blue-500 opacity-50 tracking-widest uppercase text-center w-full z-50">
         Copyright 2026 Aura AI Project. All rights reserved. <br>
         The Gateway to Agentic Era.
     </footer>
@@ -87,12 +88,13 @@
         function init() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            for(let i=0; i<60; i++) {
+            particles = [];
+            for(let i=0; i<70; i++) {
                 particles.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
-                    vx: (Math.random() - 0.5) * 0.5,
-                    vy: (Math.random() - 0.5) * 0.5
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: (Math.random() - 0.5) * 0.4
                 });
             }
         }
@@ -105,14 +107,14 @@
                 if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
                 if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
                 ctx.beginPath();
-                ctx.arc(p.x, p.y, 1.5, 0, Math.PI*2);
+                ctx.arc(p.x, p.y, 1.3, 0, Math.PI*2);
                 ctx.fill();
                 for(let j=i+1; j<particles.length; j++) {
                     const p2 = particles[j];
                     const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-                    if(dist < 150) {
-                        ctx.strokeStyle = `rgba(0, 119, 255, ${1 - dist/150})`;
-                        ctx.lineWidth = 0.5;
+                    if(dist < 160) {
+                        ctx.strokeStyle = `rgba(0, 119, 255, ${1 - dist/160})`;
+                        ctx.lineWidth = 0.4;
                         ctx.beginPath();
                         ctx.moveTo(p.x, p.y);
                         ctx.lineTo(p2.x, p2.y);
@@ -126,11 +128,7 @@
         // 수치 애니메이션
         setTimeout(() => {
             const target = 74; // 절감률 목표치
-            const gauge = document.getElementById('gauge');
             const percentText = document.getElementById('percent');
-            
-            // 게이지 채우기 (stroke-dashoffset: 440에서 110까지)
-            gauge.style.strokeDashoffset = 440 - (440 * (target / 100));
             
             // 숫자 카운트업
             let count = 0;
@@ -138,7 +136,7 @@
                 if(count >= target) clearInterval(timer);
                 percentText.innerText = count;
                 count++;
-            }, 30);
+            }, 35); // 올라가는 속도 조절
         }, 500);
 
         init();
