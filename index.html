@@ -1,64 +1,173 @@
-<div class="col-span-8 glass-panel rounded-3xl p-6 relative">
-    <h3 class="orbitron text-xs text-blue-500 mb-6 tracking-widest">ADVANCED SYSTEM GUARD STATUS</h3>
-    <div class="grid grid-cols-3 gap-4">
-        <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-800 flex flex-col justify-between h-20">
-            <p class="text-[9px] text-slate-500 orbitron">ADAPTIVE GUARD</p>
-            <div class="flex items-center justify-between">
-                <span class="text-[11px] font-medium">PATTERN ANALYSIS</span>
-                <span class="flex h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA AI | Next-Gen Agent OS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+KR:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { background: #020617; color: #e2e8f0; font-family: 'Noto Sans KR', sans-serif; overflow: hidden; margin: 0; }
+        .orbitron { font-family: 'Orbitron', sans-serif; }
+        .neon-blue { text-shadow: 0 0 15px #3b82f6; color: #60a5fa; }
+        .glass-panel { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(59, 130, 246, 0.2); }
+        .btn-glow:hover { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); transform: scale(1.05); }
+        .hidden { display: none; }
+        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .loading-bar { height: 2px; background: #3b82f6; box-shadow: 0 0 10px #3b82f6; animation: loading 2s ease-in-out; }
+        @keyframes loading { from { width: 0%; } to { width: 100%; } }
+    </style>
+</head>
+<body>
+
+    <div id="main-screen" class="h-screen flex flex-col items-center justify-center bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-slate-950 to-slate-950">
+        <div class="text-center fade-in">
+            <h1 class="orbitron text-6xl font-black tracking-tighter neon-blue mb-4">AURAAI.KR</h1>
+            <p class="text-slate-400 tracking-[0.3em] font-light mb-12">THE UNIVERSAL AGENT GUARD</p>
+            
+            <div class="grid grid-cols-5 gap-8 mb-16 max-w-4xl mx-auto px-4">
+                <div class="text-center"><div class="text-blue-500 mb-2">⚡</div><p class="text-[10px] text-slate-500 orbitron">OPTIMIZE</p></div>
+                <div class="text-center"><div class="text-blue-500 mb-2">🛡️</div><p class="text-[10px] text-slate-500 orbitron">PREVENT</p></div>
+                <div class="text-center"><div class="text-blue-500 mb-2">👁️</div><p class="text-[10px] text-slate-500 orbitron">MONITOR</p></div>
+                <div class="text-center"><div class="text-blue-500 mb-2">💰</div><p class="text-[10px] text-slate-500 orbitron">SAVING</p></div>
+                <div class="text-center"><div class="text-blue-500 mb-2">🌌</div><p class="text-[10px] text-slate-500 orbitron">CONTROL</p></div>
             </div>
-            <div class="text-[9px] text-green-400 opacity-70">STATUS: ON-WATCH</div>
+
+            <button onclick="startSystem()" class="btn-glow orbitron bg-blue-600 text-white px-12 py-4 rounded-full text-lg font-bold transition-all border border-blue-400">
+                START SYSTEM
+            </button>
         </div>
-        <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-800 flex flex-col justify-between h-20">
-            <p class="text-[9px] text-slate-500 orbitron">SEMANTIC CACHE</p>
-            <div class="flex items-center justify-between">
-                <span class="text-[11px] font-medium">RECOVERY MODE</span>
-                <span class="flex h-2 w-2 rounded-full bg-blue-500"></span>
+    </div>
+
+    <div id="loading-screen" class="hidden h-screen flex flex-col items-center justify-center bg-slate-950">
+        <div class="w-64 text-center">
+            <p class="orbitron text-xs text-blue-500 mb-4 animate-pulse">INSTALLING AURA CORE...</p>
+            <div class="w-full bg-slate-800 rounded-full h-1">
+                <div class="loading-bar rounded-full"></div>
             </div>
-            <div class="text-[9px] text-blue-400 opacity-70">HIT RATE: 82% Active</div>
         </div>
-        <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-800 flex flex-col justify-between h-20">
-            <p class="text-[9px] text-slate-500 orbitron">TOKEN OPTIMIZER</p>
-            <div class="flex items-center justify-between">
-                <span class="text-[11px] font-medium">COMPRESSION</span>
-                <div class="flex gap-0.5">
-                    <span class="w-1 h-3 bg-blue-500/50 animate-[bounce_1s_infinite]"></span>
-                    <span class="w-1 h-3 bg-blue-500/50 animate-[bounce_1.2s_infinite]"></span>
-                    <span class="w-1 h-3 bg-blue-500/50 animate-[bounce_0.8s_infinite]"></span>
+    </div>
+
+    <div id="dash-screen" class="hidden h-screen p-8 bg-slate-950">
+        <header class="flex justify-between items-center mb-8">
+            <h1 class="orbitron text-2xl font-bold neon-blue">AURA <span class="font-light text-slate-500 text-sm">MONITOR v2.1</span></h1>
+            <div class="flex items-center gap-4 text-[10px] orbitron">
+                <span class="text-green-500">● AGENT DETECTED</span>
+                <span class="text-slate-500">ID: USER-7429</span>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-12 gap-6 h-[calc(100vh-180px)]">
+            
+            <div class="col-span-4 glass-panel rounded-3xl p-6 flex flex-col">
+                <h3 class="orbitron text-xs text-blue-500 mb-6 tracking-widest flex justify-between">
+                    AGENT CONTROL <span>[SLOT 1/1]</span>
+                </h3>
+                <div id="drop-zone" class="border-2 border-dashed border-slate-700 rounded-2xl flex-1 flex flex-col items-center justify-center p-4 hover:border-blue-500 transition-all cursor-pointer">
+                    <div id="selected-agent" class="text-center">
+                        <svg class="w-10 h-10 text-slate-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-width="2" stroke-linecap="round"/></svg>
+                        <p class="text-xs text-slate-500">에이전트 파일을 끌어오거나<br>클릭하여 선택하세요</p>
+                    </div>
                 </div>
             </div>
-            <div class="text-[9px] text-blue-300 opacity-70">SAVED: 3,420 Tok</div>
-        </div>
-        <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-800 flex flex-col justify-between h-20">
-            <p class="text-[9px] text-slate-500 orbitron">PRIVACY SHIELD</p>
-            <div class="flex items-center justify-between">
-                <span class="text-[11px] font-medium">DATA MASKING</span>
-                <svg class="w-3 h-3 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"/></svg>
+
+            <div class="col-span-8 glass-panel rounded-3xl p-6 flex flex-col overflow-hidden">
+                <h3 class="orbitron text-xs text-blue-500 mb-6 tracking-widest">REAL-TIME BEHAVIOR LOG</h3>
+                <div id="behavior-log" class="flex-1 font-mono text-[11px] space-y-3 overflow-y-auto pr-2">
+                    <div class="text-slate-600 italic">에이전트를 활성화하면 분석이 시작됩니다...</div>
+                </div>
             </div>
-            <div class="text-[9px] text-yellow-400 opacity-70">ENCRYPTION: AES-256</div>
-        </div>
-        <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-800 flex flex-col justify-between h-20">
-            <p class="text-[9px] text-slate-500 orbitron">COST GOVERNOR</p>
-            <div class="flex items-center justify-between">
-                <span class="text-[11px] font-medium">BUDGET LIMIT</span>
-                <span class="text-[10px] font-bold text-slate-400">72%</span>
+
+            <div class="col-span-4 glass-panel rounded-3xl p-6 flex flex-col items-center justify-center text-center">
+                <h3 class="orbitron text-xs text-slate-500 mb-4 tracking-widest">TOTAL OPTIMIZATION</h3>
+                <div class="w-40 h-40 rounded-full border-4 border-blue-500 flex flex-col items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.3)]">
+                    <span id="save-rate" class="orbitron text-4xl font-bold neon-blue">0%</span>
+                    <span class="text-[10px] text-slate-400 orbitron">SAVED</span>
+                </div>
+                <div class="grid grid-cols-2 gap-4 mt-6 w-full text-center">
+                    <div><p class="text-[10px] text-slate-500 orbitron">HITS</p><p id="hits" class="text-sm">0</p></div>
+                    <div><p class="text-[10px] text-slate-500 orbitron">SAVED $</p><p id="saved-cost" class="text-sm">₩0</p></div>
+                </div>
             </div>
-            <div class="w-full bg-slate-700 h-1 rounded-full overflow-hidden">
-                <div class="bg-orange-500 h-full w-[72%]"></div>
+
+            <div class="col-span-8 glass-panel rounded-3xl p-6 relative">
+                <h3 class="orbitron text-xs text-blue-500 mb-6 tracking-widest">SYSTEM GUARD STATUS</h3>
+                <div class="grid grid-cols-3 gap-6">
+                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800">
+                        <p class="text-[10px] text-slate-500 mb-2">ADAPTIVE GUARD</p>
+                        <div class="flex items-center gap-2"><span class="w-2 h-2 bg-green-500 rounded-full"></span><span class="text-xs">ON-WATCH</span></div>
+                    </div>
+                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800">
+                        <p class="text-[10px] text-slate-500 mb-2">SEMANTIC CACHE</p>
+                        <div class="flex items-center gap-2"><span class="w-2 h-2 bg-blue-500 rounded-full"></span><span class="text-xs">ACTIVE</span></div>
+                    </div>
+                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800">
+                        <p class="text-[10px] text-slate-500 mb-2">LOOP DETECTOR</p>
+                        <div class="flex items-center gap-2"><span id="loop-dot" class="w-2 h-2 bg-slate-500 rounded-full"></span><span id="loop-text" class="text-xs">IDLE</span></div>
+                    </div>
+                </div>
+                <div class="absolute bottom-6 right-6 text-right">
+                    <p class="text-[10px] text-slate-600 orbitron mb-1">CURRENT PROTECTION LEVEL</p>
+                    <p class="text-xl font-bold text-blue-400 orbitron">MAXIMUM SECURITY</p>
+                </div>
             </div>
-        </div>
-        <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-800 flex flex-col justify-between h-20">
-            <p class="text-[9px] text-slate-500 orbitron">RESPONSE AUDITOR</p>
-            <div class="flex items-center justify-between">
-                <span class="text-[11px] font-medium">FACT CHECK</span>
-                <span class="w-2 h-2 border-2 border-blue-400 rounded-full animate-ping"></span>
-            </div>
-            <div class="text-[9px] text-blue-200 opacity-70">VERIFIED: 100%</div>
         </div>
     </div>
-    
-    <div class="absolute bottom-4 right-6 text-right">
-        <p class="text-[8px] text-slate-600 orbitron mb-0.5">SECURITY PROTOCOL</p>
-        <p class="text-sm font-bold text-blue-400 orbitron tracking-widest">MULTI-LAYERED PROTECTION ACTIVE</p>
-    </div>
-</div>
+
+    <script>
+        function startSystem() {
+            document.getElementById('main-screen').classList.add('hidden');
+            document.getElementById('loading-screen').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('loading-screen').classList.add('hidden');
+                document.getElementById('dash-screen').classList.remove('hidden');
+                document.getElementById('dash-screen').classList.add('fade-in');
+            }, 2000);
+        }
+
+        // 에이전트 선택 시뮬레이션
+        document.getElementById('drop-zone').onclick = function() {
+            this.classList.add('border-blue-500', 'bg-blue-900/10');
+            document.getElementById('selected-agent').innerHTML = `
+                <div class="text-blue-400">
+                    <svg class="w-10 h-10 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
+                    <p class="font-bold text-sm">Stock_Trading_Bot.py</p>
+                    <p class="text-[10px] opacity-60">보호 대상 등록 완료</p>
+                </div>
+            `;
+            startSimulation();
+        }
+
+        function startSimulation() {
+            const logs = [
+                "에이전트 통신 가로채기 활성화...",
+                "질문 분석: '삼성전자 주가 분석해 줘'",
+                "시맨틱 캐시 검색 중... 유사도 92% 발견!",
+                "최적화 적용: 캐시 데이터로 응답 대체 (토큰 100% 절감)",
+                "반복 동작 감시 중... 정상 패턴 확인",
+                "질문 분석: '오늘의 주요 뉴스 요약해'",
+                "신규 패턴 확인: 32% 압축 후 서버 전송"
+            ];
+            let i = 0;
+            const logContainer = document.getElementById('behavior-log');
+            logContainer.innerHTML = "";
+            
+            const interval = setInterval(() => {
+                if (i >= logs.length) { i = 0; }
+                const p = document.createElement('div');
+                p.className = 'fade-in flex gap-2 border-l border-slate-800 pl-3 py-1';
+                p.innerHTML = `<span class="text-blue-500 opacity-50">#</span> ${logs[i]}`;
+                logContainer.prepend(p);
+                
+                // 수치 업데이트 시뮬레이션
+                document.getElementById('save-rate').innerText = "25%"; // 대표님 수치 반영
+                document.getElementById('hits').innerText = i + 1;
+                document.getElementById('saved-cost').innerText = `₩${(i + 1) * 120}`;
+                
+                i++;
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
