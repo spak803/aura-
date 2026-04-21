@@ -2,146 +2,257 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA AI | 에이전트 OS</title>
     <title>AURA AI | 에이전트 통합 가드</title>
-    <script src="https://tailwindcss.com"></script>
-    <link href="https://googleapis.com" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+KR:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Noto Sans KR', sans-serif; background: #020617; color: #e2e8f0; overflow: hidden; }
-        .orbitron { font-family: 'Orbitron', sans-serif; }
-        .neon-blue { color: #3b82f6; text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
-        .glass-panel { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(51, 65, 85, 0.4); backdrop-filter: blur(12px); }
-        .led-dot { width: 10px; height: 10px; border-radius: 50%; background-color: #1e293b; transition: all 0.1s; }
+@@ -18,16 +18,15 @@
+        @keyframes loading { from { width: 0%; } to { width: 100%; } }
+        .modal-bg { background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(10px); }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.3); border-radius: 10px; }
-        #main-screen { background: radial-gradient(circle at center, #1e3a8a 0%, #020617 100%); }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(59, 130, 246, 0.05); }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.2); rounded-full: 2px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.2); border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <!-- [1. 메인 랜딩 화면] -->
-    <div id="main-screen" class="h-screen flex flex-col items-center justify-center relative">
+    <div id="main-screen" class="h-screen relative flex flex-col items-center justify-center bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-900/10 via-slate-950 to-slate-950">
+
         <header class="absolute top-8 left-8">
-            <h1 class="orbitron text-3xl font-black tracking-tighter neon-blue uppercase">AURAAI.KR</h1>
+            <h1 class="orbitron text-3xl font-black tracking-tighter neon-blue">AURA.KR</h1>
+            <h1 class="orbitron text-3xl font-black tracking-tighter neon-blue">AURAAI.KR</h1>
         </header>
 
-        <div class="text-center z-10">
-            <h2 class="orbitron text-7xl font-black mb-4 tracking-tighter text-white">AURA <span class="text-blue-500 font-bold">GUARD</span></h2>
+        <div class="flex-1"></div>
+@@ -36,14 +35,14 @@
             <p class="text-slate-500 tracking-[0.4em] font-light mb-16 uppercase text-xs">The Universal Agent Guard</p>
 
-            <!-- 원본의 이모티콘 그리드 복구 -->
             <div class="grid grid-cols-5 gap-10 mb-20 max-w-5xl mx-auto px-6">
-                <div class="group"><div class="text-4xl mb-3 transition-transform group-hover:scale-110">✂️</div><p class="text-sm font-medium text-slate-300">토큰 최적화</p><p class="text-[10px] text-slate-500">비용 가위질</p></div>
-                <div class="group"><div class="text-4xl mb-3 transition-transform group-hover:scale-110">🛑</div><p class="text-sm font-medium text-slate-300">무한루프 방지</p><p class="text-[10px] text-slate-500">지능적 차단</p></div>
-                <div class="group"><div class="text-4xl mb-3 transition-transform group-hover:scale-110">📡</div><p class="text-sm font-medium text-slate-300">실시간 관제</p><p class="text-[10px] text-slate-500">에이전트 감시</p></div>
-                <div class="group"><div class="text-4xl mb-3 transition-transform group-hover:scale-110">📉</div><p class="text-sm font-medium text-slate-300">비용 절감</p><p class="text-[10px] text-slate-500">소모율 25%↓</p></div>
-                <div class="group"><div class="text-4xl mb-3 transition-transform group-hover:scale-110">🛡️</div><p class="text-sm font-medium text-slate-300">통합 제어</p><p class="text-[10px] text-slate-500">OS급 가드</p></div>
+                <div class="group"><div class="text-4xl mb-3 transition-transform group-hover:scale-110">✂️</div><p class="text-sm font-medium text-slate-300 mb-1">토큰 최적화</p><p class="text-[10px] text-slate-500">비용 가위질</p></div>
+                <div class="group"><div class="text-4xl mb-3 transition-transform group-hover:scale-110">🛑</div><p class="text-sm font-medium text-slate-300 mb-1">무한루프 방지</p><p class="text-[10px] text-slate-500">지능적 차단</p></div>
+                <div class="group"><div class="text-4xl mb-3 transition-transform group-hover:scale-110">📡</div><p class="text-sm font-medium text-slate-300 mb-1">실시간 관제</p><p class="text-[10px] text-slate-500">에이전트 감시</p></div>
+                <div class="group"><div class="text-4xl mb-3 transition-transform group-hover:scale-110">📉</div><p class="text-sm font-medium text-slate-300 mb-1">비용 절감</p><p class="text-[10px] text-slate-500">소모율 25%↓</p></div>
+                <div class="group"><div class="text-4xl mb-3 transition-transform group-hover:scale-110">🛡️</div><p class="text-sm font-medium text-slate-300 mb-1">통합 제어</p><p class="text-[10px] text-slate-500">OS급 가드</p></div>
+                <div class="group"><div class="text-4xl mb-3">⚡</div><p class="text-sm font-medium text-slate-300 mb-1">토큰 최적화</p><p class="text-[10px] text-slate-500 italic">비용 효율 극대화</p></div>
+                <div class="group"><div class="text-4xl mb-3">🛑</div><p class="text-sm font-medium text-slate-300 mb-1">무한루프 방지</p><p class="text-[10px] text-slate-500 italic">지능적 흐름 차단</p></div>
+                <div class="group"><div class="text-4xl mb-3">📡</div><p class="text-sm font-medium text-slate-300 mb-1">실시간 관제</p><p class="text-[10px] text-slate-500 italic">에이전트 모니터링</p></div>
+                <div class="group"><div class="text-4xl mb-3">📉</div><p class="text-sm font-medium text-slate-300 mb-1">비용 절감</p><p class="text-[10px] text-slate-500 italic">평균 25% 하락</p></div>
+                <div class="group"><div class="text-4xl mb-3">🛡️</div><p class="text-sm font-medium text-slate-300 mb-1">통합 제어</p><p class="text-[10px] text-slate-500 italic">엔터프라이즈 보안</p></div>
             </div>
 
-            <button onclick="startSystem()" class="orbitron bg-blue-600 hover:bg-blue-500 text-white px-20 py-6 rounded-full text-2xl font-bold transition-all border border-blue-400 shadow-[0_0_50px_rgba(59,130,246,0.3)]">
+            <button onclick="startSystem()" class="orbitron bg-blue-600 hover:bg-blue-500 text-white px-16 py-5 rounded-full text-xl font-bold transition-all shadow-[0_0_30px_rgba(59,130,246,0.4)] border border-blue-400 btn-glow">
+            <button onclick="startSystem()" class="orbitron bg-blue-600 hover:bg-blue-500 text-white px-16 py-5 rounded-full text-xl font-bold transition-all shadow-[0_0_30px_rgba(59,130,246,0.4)] border border-blue-400">
                 START SYSTEM
             </button>
         </div>
-    </div>
-
-    <!-- [2. 4분할 제어 시스템] -->
-    <div id="control-center" class="hidden h-screen p-8 flex flex-col">
-        <header class="flex justify-between items-center mb-6">
-            <h1 class="orbitron text-2xl font-bold neon-blue uppercase">AURA CONTROL</h1>
-            <div class="flex items-center gap-6 text-[10px] orbitron">
-                <span id="tier-badge" class="text-blue-500">FREE TIER (MAX 3)</span>
-                <button onclick="location.reload()" class="text-red-500 border border-red-500/30 px-4 py-1 rounded">EXIT</button>
+@@ -58,61 +57,56 @@
+        <header class="flex justify-between items-center mb-8">
+            <h1 class="orbitron text-2xl font-bold neon-blue">AURA <span class="font-light text-slate-500 text-sm italic">CONTROL CENTER</span></h1>
+            <div class="flex items-center gap-6">
+                <button onclick="toggleSystem()" id="power-btn" class="bg-red-600 hover:bg-red-500 text-white px-6 py-2 rounded-lg text-xs font-bold orbitron transition-all btn-glow">STOP ENGINE</button>
+                <button onclick="toggleSystem()" id="power-btn" class="bg-red-600 hover:bg-red-500 text-white px-6 py-2 rounded-lg text-xs font-bold orbitron transition-all">STOP ENGINE</button>
+                <div class="text-[10px] orbitron text-right">
+                    <span class="text-green-500">● SYSTEM ONLINE</span><br>
+                    <span class="text-slate-500">VER 2.4.0_STABLE</span>
+                    <span class="text-slate-500 italic">AURAAI.KR OFFICIAL</span>
+                </div>
             </div>
         </header>
 
-        <div class="grid grid-cols-2 grid-rows-2 gap-6 flex-1 overflow-hidden">
-            <!-- 창 1: 에이전트 리스트 -->
-            <div class="glass-panel rounded-3xl p-6 flex flex-col overflow-hidden">
-                <h3 class="orbitron text-xs text-blue-500 mb-6 tracking-widest">AGENT LIST</h3>
-                <div id="agent-list" class="flex-1 space-y-4 overflow-y-auto custom-scrollbar pr-2"></div>
+        <div class="grid grid-cols-12 gap-6 h-[calc(100vh-180px)]">
+            <div class="col-span-4 glass-panel rounded-3xl p-6 flex flex-col relative">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="orbitron text-xs text-blue-500 tracking-widest uppercase">Agent Control Tower</h3>
+                    <h3 class="orbitron text-xs text-blue-500 tracking-widest uppercase">Agent Control</h3>
+                    <button onclick="openSettings()" class="hover:bg-slate-800 p-1.5 rounded-lg transition-all group">
+                        <svg class="w-4 h-4 text-slate-500 group-hover:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-width="2"/></svg>
+                    </button>
+                </div>
+                <div id="drop-zone" class="border-2 border-dashed border-slate-700 rounded-2xl flex-1 flex flex-col items-center justify-center p-4 hover:border-blue-500 transition-all cursor-pointer">
+                    <div id="selected-agent" class="text-center">
+                        <svg class="w-8 h-8 text-slate-700 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2"/></svg>
+                        <p class="text-xs text-slate-500">에이전트 파일을 끌어오거나<br>클릭하여 선택하세요</p>
+                    </div>
+                    <p class="text-xs text-slate-500 text-center">에이전트를 선택하면<br>AURA 가드가 활성화됩니다</p>
+                </div>
             </div>
 
-            <!-- 창 2: 동작 로그 -->
-            <div class="glass-panel rounded-3xl p-6 flex flex-col overflow-hidden">
-                <h3 class="orbitron text-xs text-blue-500 mb-6 tracking-widest">BEHAVIOR LOG</h3>
-                <div id="behavior-log" class="flex-1 font-mono text-[10px] space-y-1 overflow-y-auto custom-scrollbar text-slate-500"></div>
+            <div class="col-span-8 glass-panel rounded-3xl p-6 flex flex-col overflow-hidden">
+                <h3 class="orbitron text-xs text-blue-500 mb-6 tracking-widest uppercase">Real-Time Behavior Log</h3>
+                <h3 class="orbitron text-xs text-blue-500 mb-6 tracking-widest uppercase">AURA Logic Behavior</h3>
+                <div id="behavior-log" class="flex-1 font-mono text-[11px] space-y-1.5 overflow-y-auto pr-2 custom-scrollbar text-slate-400"></div>
             </div>
 
-            <!-- 창 3: 절약 통계 -->
-            <div class="glass-panel rounded-3xl p-6 flex flex-col items-center justify-center relative">
-                <h3 class="orbitron text-xs text-blue-500 absolute top-6 left-6 uppercase tracking-widest">Efficiency</h3>
-                <div id="savings-percent" class="orbitron text-8xl font-black text-green-500">0%</div>
-                <div class="mt-4 orbitron text-slate-500 text-sm">SAVED: <span id="saved-tokens" class="text-blue-400">0</span> TKNS</div>
+            <div class="col-span-4 glass-panel rounded-3xl p-6 flex items-center justify-center gap-8 text-center">
+                <div>
+                    <h3 class="orbitron text-[9px] text-slate-500 mb-3 uppercase tracking-widest">토큰 절약 소모율</h3>
+                    <div class="w-32 h-32 rounded-full border-4 border-blue-500 flex flex-col items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.2)]">
+            <div class="col-span-4 glass-panel rounded-3xl p-6 flex items-center justify-center gap-8">
+                <div class="text-center">
+                    <h3 class="text-[9px] text-slate-500 mb-3 uppercase tracking-widest">토큰 절약률</h3>
+                    <div class="w-32 h-32 rounded-full border-4 border-blue-500 flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.2)]">
+                        <span class="orbitron text-3xl font-bold neon-blue">25%</span>
+                        <span class="text-[9px] text-blue-300 orbitron">SAVED</span>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="orbitron text-[9px] text-slate-500 mb-3 uppercase tracking-widest">시맨틱 캐시 비율</h3>
+                    <div class="w-32 h-32 rounded-full border-4 border-slate-700/50 flex flex-col items-center justify-center">
+                <div class="text-center">
+                    <h3 class="text-[9px] text-slate-500 mb-3 uppercase tracking-widest">시맨틱 캐시</h3>
+                    <div class="w-32 h-32 rounded-full border-4 border-slate-700/50 flex items-center justify-center">
+                        <span id="cache-rate" class="orbitron text-3xl font-bold text-slate-300">0%</span>
+                        <span class="text-[9px] text-slate-500 orbitron">ACTIVE</span>
+                    </div>
+                </div>
             </div>
 
-            <!-- 창 4: 제어 스위치 -->
-            <div class="glass-panel rounded-3xl p-6">
-                <h3 class="orbitron text-xs text-blue-500 mb-6 uppercase tracking-widest">Control Switches</h3>
-                <div class="grid grid-cols-2 gap-4">
-                    <button class="bg-slate-900/50 p-4 rounded-2xl border border-slate-800 text-[11px] orbitron text-left hover:border-blue-500/50 transition-all">✂️ SEMANTIC PRUNING</button>
-                    <button class="bg-slate-900/50 p-4 rounded-2xl border border-slate-800 text-[11px] orbitron text-left hover:border-blue-500/50 transition-all">🛑 LOOP BLOCKER</button>
-                    <button class="bg-slate-900/50 p-4 rounded-2xl border border-slate-800 text-[11px] orbitron text-left hover:border-blue-500/50 transition-all">📡 REAL-TIME MONITOR</button>
-                    <button onclick="alert('PRO 라이선스가 필요합니다.')" class="bg-blue-600 p-4 rounded-2xl text-[11px] orbitron font-bold">💎 UPGRADE TO PRO</button>
+            <div class="col-span-8 glass-panel rounded-3xl p-6">
+                <h3 class="orbitron text-xs text-blue-500 mb-6 tracking-widest uppercase font-bold underline decoration-blue-500/30 underline-offset-8">실제 구현 가드 시스템 동작상태</h3>
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="bg-slate-900 p-3 rounded-xl border border-slate-800"><p class="text-[10px] text-slate-500 mb-2">반복동작 감시</p><div class="flex items-center gap-2"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span><span class="text-xs">작동중 (ON)</span></div></div>
+                    <div class="bg-slate-900 p-3 rounded-xl border border-slate-800"><p class="text-[10px] text-slate-500 mb-2">시맨틱 캐시</p><div class="flex items-center gap-2"><span class="w-2 h-2 bg-blue-500 rounded-full"></span><span class="text-xs">작동중 (ON)</span></div></div>
+                    <div class="bg-slate-900 p-3 rounded-xl border border-slate-800"><p class="text-[10px] text-slate-500 mb-2">토큰 최적화</p><div class="flex items-center gap-2"><span class="w-2 h-2 bg-blue-400 rounded-full"></span><span class="text-xs">작동중 (ON)</span></div></div>
+                    <div class="bg-slate-900 p-3 rounded-xl border border-slate-800"><p class="text-[10px] text-slate-500 mb-2">개인정보 보호</p><div class="flex items-center gap-2"><span class="w-2 h-2 bg-yellow-500 rounded-full"></span><span class="text-xs">작동중 (ON)</span></div></div>
+                    <div class="bg-slate-900 p-3 rounded-xl border border-slate-800"><p class="text-[10px] text-slate-500 mb-2">비용 제어</p><div class="flex items-center gap-2"><span class="w-2 h-2 bg-orange-500 rounded-full"></span><span class="text-xs">작동중 (ON)</span></div></div>
+                    <div class="bg-slate-900 p-3 rounded-xl border border-slate-800"><p class="text-[10px] text-slate-500 mb-2">응답 검증</p><div class="flex items-center gap-2"><span class="w-2 h-2 bg-purple-500 rounded-full"></span><span class="text-xs">작동중 (ON)</span></div></div>
+                    <div class="bg-slate-900 p-3 rounded-xl border border-slate-800"><p class="text-[10px] text-slate-500 mb-2">반복동작 감시</p><div class="flex items-center gap-2"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span><span class="text-xs">ON</span></div></div>
+                    <div class="bg-slate-900 p-3 rounded-xl border border-slate-800"><p class="text-[10px] text-slate-500 mb-2">시맨틱 캐시</p><div class="flex items-center gap-2"><span class="w-2 h-2 bg-blue-500 rounded-full"></span><span class="text-xs">ON</span></div></div>
+                    <div class="bg-slate-900 p-3 rounded-xl border border-slate-800"><p class="text-[10px] text-slate-500 mb-2">토큰 최적화</p><div class="flex items-center gap-2"><span class="w-2 h-2 bg-blue-400 rounded-full"></span><span class="text-xs">ON</span></div></div>
+                    <div class="bg-slate-900 p-3 rounded-xl border border-slate-800"><p class="text-[10px] text-slate-500 mb-2">개인정보 보호</p><div class="flex items-center gap-2"><span class="w-2 h-2 bg-yellow-500 rounded-full"></span><span class="text-xs">ON</span></div></div>
+                    <div class="bg-slate-900 p-3 rounded-xl border border-slate-800"><p class="text-[10px] text-slate-500 mb-2">비용 제어</p><div class="flex items-center gap-2"><span class="w-2 h-2 bg-orange-500 rounded-full"></span><span class="text-xs">ON</span></div></div>
+                    <div class="bg-slate-900 p-3 rounded-xl border border-slate-800"><p class="text-[10px] text-slate-500 mb-2">응답 검증</p><div class="flex items-center gap-2"><span class="w-2 h-2 bg-purple-500 rounded-full"></span><span class="text-xs">ON</span></div></div>
                 </div>
             </div>
         </div>
+@@ -122,19 +116,9 @@
+        <div class="glass-panel w-full max-w-2xl rounded-3xl p-8 border-blue-500/50 shadow-[0_0_60px_rgba(0,0,0,0.7)]">
+            <div class="flex justify-between items-center mb-8 pb-4 border-b border-slate-800">
+                <h2 class="orbitron text-xl font-bold neon-blue">AURA 필터 설정 및 버전 관리</h2>
+                <button onclick="closeSettings()" class="text-slate-600 hover:text-white text-2xl group transition-all">&times;</button>
+            </div>
+            
+            <div class="space-y-6">
+                <div>
+                    <label class="text-xs text-slate-400 block mb-3 uppercase orbitron tracking-wider">맞춤형 필터 업데이트 히스토리 (최근 20개)</label>
+                    <div class="space-y-2 h-64 overflow-y-auto pr-2 custom-scrollbar" id="version-list">
+                        </div>
+                </div>
+                <div class="bg-blue-950/30 p-4 rounded-xl border border-blue-900/30 text-[11px] text-blue-300">
+                    ※ 특정 버전을 선택하여 [RESTORE] 버튼을 누르면 해당 시점의 필터 로직이 시스템에 고정(Fixed) 적용됩니다.
+                </div>
+                <button onclick="closeSettings()" class="text-slate-600 hover:text-white text-2xl">&times;</button>
+            </div>
+            <div class="space-y-2 h-64 overflow-y-auto pr-2 custom-scrollbar" id="version-list"></div>
+        </div>
     </div>
 
-    <script>
-        const agents = ["AUTO_GPT_01", "RESEARCH_V2", "CODE_PILOT", "DATA_EXTRACT", "WEB_SCRAPER"];
-        let activeAgents = new Set();
-        let totalSaved = 0;
-
-        function startSystem() {
-            document.getElementById('main-screen').style.display = 'none';
-            document.getElementById('control-center').classList.remove('hidden');
-            render();
+@@ -158,15 +142,15 @@
+            if (isRunning) {
+                isRunning = false;
+                btn.innerText = "RESUME ENGINE";
+                btn.className = "bg-green-600 hover:bg-green-500 text-white px-6 py-2 rounded-lg text-xs font-bold orbitron transition-all btn-glow";
+                btn.className = "bg-green-600 hover:bg-green-500 text-white px-6 py-2 rounded-lg text-xs font-bold orbitron transition-all";
+                clearInterval(logInterval);
+                addLog("시스템 가동이 사용자에 의해 중단되었습니다.", "system");
+                addLog("시스템 가동 중단됨.", "system");
+            } else {
+                isRunning = true;
+                btn.innerText = "STOP ENGINE";
+                btn.className = "bg-red-600 hover:bg-red-500 text-white px-6 py-2 rounded-lg text-xs font-bold orbitron transition-all btn-glow";
+                btn.className = "bg-red-600 hover:bg-red-500 text-white px-6 py-2 rounded-lg text-xs font-bold orbitron transition-all";
+                startSimulation();
+                addLog("Aura 가드 엔진 재개됨.", "system");
+                addLog("AURA 가드 재개됨.", "system");
+            }
         }
 
-        function render() {
-            const list = document.getElementById('agent-list');
-            agents.forEach((name, i) => {
-                const div = document.createElement('div');
-                div.className = "flex items-center justify-between p-4 bg-slate-900/30 border border-slate-800 rounded-2xl";
+@@ -179,54 +163,39 @@
+                const ver = `Aura_Filter_v2.4.${20-i}`;
                 div.innerHTML = `
-                    <div class="flex items-center gap-4"><div id="led-${i}" class="led-dot"></div><span class="text-[11px] orbitron">${name}</span></div>
-                    <input type="checkbox" onchange="toggle(${i}, this)" class="w-4 h-4 accent-blue-600">
+                    <div class="flex items-center gap-3">
+                        <span class="orbitron text-[10px] ${i===1 ? 'text-blue-400' : 'text-slate-600'}">#${(21-i).toString().padStart(2, '0')}</span>
+                        <span class="orbitron text-[10px] text-slate-600">#${(21-i).toString().padStart(2, '0')}</span>
+                        <span class="text-xs font-medium text-slate-200">${ver}</span>
+                        <span class="text-[9px] text-slate-600">| 2026-04-${10-Math.floor(i/2)}</span>
+                    </div>
+                    ${i===1 
+                        ? '<span class="text-[9px] orbitron text-blue-400 bg-blue-900/50 px-2 py-0.5 rounded">CURRENT ACTIVE</span>' 
+                        : `<button class="text-[9px] orbitron bg-slate-800 hover:bg-blue-600 px-3 py-1 rounded transition-all text-slate-400 hover:text-white" onclick="restoreVersion('${ver}')">RESTORE</button>`}
+                    ${i===1 ? '<span class="text-[9px] text-blue-400 font-bold">ACTIVE</span>' : `<button class="text-[9px] orbitron bg-slate-800 hover:bg-blue-600 px-3 py-1 rounded" onclick="restoreVersion('${ver}')">RESTORE</button>`}
                 `;
                 list.appendChild(div);
-            });
-        }
-
-        function toggle(i, cb) {
-            if (activeAgents.size >= 3 && cb.checked) {
-                cb.checked = false;
-                alert("무료 버전 한도 초과 (3개)");
-                return;
             }
-            cb.checked ? activeAgents.add(i) : activeAgents.delete(i);
-            addLog(cb.checked ? `ACTIVE: ${agents[i]}` : `OFF: ${agents[i]}`);
+            document.getElementById('settings-modal').classList.remove('hidden');
         }
 
-        setInterval(() => {
-            activeAgents.forEach(i => {
-                if (Math.random() > 0.6) {
-                    const led = document.getElementById(`led-${i}`);
-                    led.style.backgroundColor = "#ef4444";
-                    led.style.boxShadow = "0 0 10px #ef4444";
-                    const saved = Math.floor(Math.random() * 80);
-                    totalSaved += saved;
-                    document.getElementById('saved-tokens').innerText = totalSaved.toLocaleString();
-                    document.getElementById('savings-percent').innerText = Math.min(65, Math.floor(totalSaved/500)) + "%";
-                    addLog(`[${agents[i]}] OPTIMIZING -${saved} TKNS`);
-                    setTimeout(() => { led.style.backgroundColor = "#1e293b"; led.style.boxShadow = "none"; }, 150);
-                }
-            });
-        }, 800);
+        function restoreVersion(ver) {
+            closeSettings();
+            addLog(`시스템 복원 중: [${ver}] 필터 로직으로 복원 완료.`, "system");
+        }
 
-        function addLog(msg) {
-            const log = document.getElementById('behavior-log');
-            const p = document.createElement('p');
-            p.innerHTML = `<span class="text-slate-800">[${new Date().toLocaleTimeString()}]</span> > ${msg}`;
-            log.prepend(p);
+        function restoreVersion(ver) { closeSettings(); addLog(`[${ver}] 필터로 복원 완료.`, "system"); }
+        function closeSettings() { document.getElementById('settings-modal').classList.add('hidden'); }
+
+        function addLog(msg, type = "normal") {
+            const logContainer = document.getElementById('behavior-log');
+            const p = document.createElement('div');
+            const time = new Date().toLocaleTimeString();
+            p.className = 'fade-in flex gap-2 border-l-2 pl-3 mb-1.5';
+            
+            if (type === "system") {
+                p.className += ' border-yellow-500 bg-yellow-950/10 py-1';
+                p.innerHTML = `<span class="text-yellow-400">[${time}] ${msg}</span>`;
+            } else {
+                p.className += ' border-blue-900/50';
+                p.innerHTML = `<span class="text-slate-600">[${time}]</span> <span class="text-blue-500">#</span> <span class="text-slate-400">${msg}</span>`;
+            }
+            
+            p.className = 'fade-in flex gap-2 border-l-2 pl-3 mb-1.5 border-blue-900/50';
+            if (type === "system") p.innerHTML = `<span class="text-yellow-400">[${time}] ${msg}</span>`;
+            else p.innerHTML = `<span class="text-slate-600">[${time}]</span> <span class="text-blue-500">#</span> <span class="text-slate-400">${msg}</span>`;
+            logContainer.prepend(p);
+        }
+
+        function startSimulation() {
+            if (logInterval) clearInterval(logInterval);
+            const logs = [
+                "패킷 가로채기 활성화: GPT-4 API 호출 감지",
+                "시맨틱 캐시 검색 중... 유사도 91% 발견",
+                "최적화: 토큰 35% 압축 및 가위질 완료",
+                "무한루프 감시 중: 행동 패턴 정상",
+                "개인정보 필터링: 신용카드 번호 마스킹 완료",
+                "비용 체크: 현재 세션 비용 ₩3,400 절감됨",
+                "응답 검증: AI 응답의 사실관계 확인 중",
+                "캐시 적중! 로컬 응답 전송으로 비용 0원 처리"
+                "데이터 패킷 최적화 알고리즘 가동 중",
+                "유사성 검색: 시맨틱 캐시 적중(92%)",
+                "토큰 최적화: 텍스트 데이터 압축 완료",
+                "무한루프 방지 시스템: 행동 패턴 분석 완료",
+                "민감 정보 보안 필터링 적용 중",
+                "비용 분석: 현재 세션 효율성 25% 도달",
+                "AI 응답 품질 무결성 검증 완료"
+            ];
+            let i = 0;
+            logInterval = setInterval(() => {
+@@ -235,15 +204,14 @@
+                if (cacheRate < 88) {
+                    cacheRate += 2;
+                    document.getElementById('cache-rate').innerText = cacheRate + "%";
+                    if (cacheRate > 50) document.getElementById('cache-rate').className = "orbitron text-3xl font-bold text-blue-300 neon-blue";
+                }
+                i++;
+            }, 2000);
+        }
+
+        document.getElementById('drop-zone').onclick = function() {
+            this.innerHTML = `<div class="text-blue-400 text-center"><p class="font-bold text-sm">Agent_Research_v1.py</p><p class="text-[9px] opacity-60">보호 및 최적화 활성화됨</p></div>`;
+            addLog("에이전트 감지됨: Agent_Research_v1.py 감시를 시작합니다.", "system");
+            this.innerHTML = `<div class="text-blue-400 text-center font-bold">Agent_Active.py</div>`;
+            addLog("에이전트 보호 시스템 가동.", "system");
+            startSimulation();
         }
     </script>
-</body>
-</html>
