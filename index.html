@@ -2,149 +2,168 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AURA AI | 에이전트 통합 가드</title>
     <script src="https://tailwindcss.com"></script>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #020617; color: #e2e8f0; overflow: hidden; }
         .orbitron { font-family: 'Orbitron', sans-serif; }
         .neon-blue { color: #3b82f6; text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
-        .glass-panel { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(51, 65, 85, 0.5); backdrop-filter: blur(10px); }
+        .glass-panel { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(51, 65, 85, 0.5); backdrop-filter: blur(10px); height: 100%; }
+        .led-dot { width: 10px; height: 10px; border-radius: 50%; background-color: #334155; transition: 0.1s; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(59, 130, 246, 0.05); }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.2); border-radius: 10px; }
-        /* LED 기본 스타일 */
-        .led-dot { width: 8px; height: 8px; border-radius: 50%; background-color: #334155; transition: all 0.1s; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.3); border-radius: 10px; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-300">
+<body>
 
-    <!-- [메인 화면] -->
-    <div id="main-screen" class="h-screen flex flex-col items-center justify-center bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-900/10 via-slate-950 to-slate-950">
-        <header class="absolute top-8 left-8">
-            <h1 class="orbitron text-3xl font-black tracking-tighter neon-blue">AURAAI.KR</h1>
-        </header>
-
+    <!-- [1. 메인 파란색 바탕 랜딩 화면] -->
+    <div id="main-screen" class="h-screen flex flex-col items-center justify-center bg-blue-900/20">
         <div class="text-center">
-            <h2 class="orbitron text-6xl font-black mb-4 tracking-tighter text-white">AURA <span class="text-blue-500">GUARD</span></h2>
-            <p class="text-slate-500 tracking-[0.4em] font-light mb-16 uppercase text-xs">The Universal Agent Guard</p>
-
-            <div class="grid grid-cols-5 gap-10 mb-20 max-w-5xl mx-auto px-6">
-                <div class="group text-center"><div class="text-4xl mb-3">⚡</div><p class="text-sm font-medium">토큰 최적화</p></div>
-                <div class="group text-center"><div class="text-4xl mb-3">🛑</div><p class="text-sm font-medium">무한루프 방지</p></div>
-                <div class="group text-center"><div class="text-4xl mb-3">📡</div><p class="text-sm font-medium">실시간 관제</p></div>
-                <div class="group text-center"><div class="text-4xl mb-3">📉</div><p class="text-sm font-medium">비용 절감</p></div>
-                <div class="group text-center"><div class="text-4xl mb-3">🛡️</div><p class="text-sm font-medium">통합 제어</p></div>
-            </div>
-
-            <button onclick="startSystem()" class="orbitron bg-blue-600 hover:bg-blue-500 text-white px-16 py-5 rounded-full text-xl font-bold transition-all shadow-[0_0_30px_rgba(59,130,246,0.4)] border border-blue-400">
-                START SYSTEM
+            <h1 class="orbitron text-7xl font-black neon-blue mb-8">AURA AI</h1>
+            <p class="orbitron text-slate-400 tracking-[0.5em] mb-12">THE AGENT OS GUARD</p>
+            <button onclick="enterSystem()" class="orbitron bg-blue-600 hover:bg-blue-500 text-white px-20 py-6 rounded-full text-2xl font-bold transition-all shadow-[0_0_50px_rgba(59,130,246,0.4)]">
+                SYSTEM START
             </button>
         </div>
     </div>
 
-    <!-- [제어 화면] -->
-    <div id="control-screen" class="hidden h-screen p-8 flex flex-col">
-        <header class="flex justify-between items-center mb-8">
-            <h1 class="orbitron text-2xl font-bold neon-blue">AURA <span class="font-light text-slate-500 text-sm italic">CONTROL CENTER</span></h1>
-            <div class="flex items-center gap-6">
-                <button onclick="location.reload()" class="bg-red-600 hover:bg-red-500 text-white px-6 py-2 rounded-lg text-xs font-bold orbitron transition-all">STOP ENGINE</button>
-                <div class="text-[10px] orbitron text-right">
-                    <span class="text-green-500">● SYSTEM ONLINE</span><br>
-                    <span id="license-tier" class="text-slate-500">FREE VERSION</span>
-                </div>
-            </div>
+    <!-- [2. 4분할 관제 시스템] -->
+    <div id="control-center" class="hidden h-screen p-6 flex flex-col">
+        <header class="flex justify-between items-center mb-6 px-2">
+            <h1 class="orbitron text-xl font-bold neon-blue">AURA <span class="text-slate-500 text-sm italic">CONTROL DESK</span></h1>
+            <div id="tier-status" class="text-[10px] orbitron text-blue-500">FREE TIER MODE (MAX 3)</div>
         </header>
 
-        <div class="grid grid-cols-12 gap-6 h-[calc(100vh-180px)]">
-            <!-- 왼쪽 에이전트 리스트 (col-span-4) -->
-            <div class="col-span-4 glass-panel rounded-3xl p-6 flex flex-col overflow-hidden">
-                <h3 class="orbitron text-xs text-blue-500 mb-6 tracking-widest uppercase">Agent Control</h3>
-                
-                <div id="agent-container" class="flex-1 overflow-y-auto custom-scrollbar space-y-4 pr-2">
-                    <!-- 에이전트 항목들이 스크립트로 생성됨 -->
+        <!-- 4분할 그리드 -->
+        <div class="grid grid-cols-2 grid-rows-2 gap-6 flex-1 overflow-hidden">
+            
+            <!-- 창 1: AI 에이전트 상태창 -->
+            <div class="glass-panel rounded-2xl p-5 flex flex-col">
+                <h3 class="orbitron text-xs text-blue-400 mb-4 uppercase tracking-widest">1. Agent Status</h3>
+                <div id="agent-list" class="space-y-3 overflow-y-auto custom-scrollbar pr-2">
+                    <!-- 에이전트 리스트 (JS로 생성) -->
                 </div>
             </div>
 
-            <!-- 오른쪽 로그창 (col-span-8) -->
-            <div class="col-span-8 glass-panel rounded-3xl p-6 flex flex-col overflow-hidden">
-                <h3 class="orbitron text-xs text-blue-500 mb-6 tracking-widest uppercase">AURA Logic Behavior</h3>
-                <div id="behavior-log" class="flex-1 font-mono text-[11px] space-y-1.5 overflow-y-auto pr-2 custom-scrollbar text-slate-400">
-                    <p class="text-blue-500/50">> AURA Kernel Loaded. Waiting for Agent selection...</p>
+            <!-- 창 2: 실제 동작 상태 로그창 -->
+            <div class="glass-panel rounded-2xl p-5 flex flex-col">
+                <h3 class="orbitron text-xs text-blue-400 mb-4 uppercase tracking-widest">2. Behavior Log</h3>
+                <div id="behavior-log" class="flex-1 font-mono text-[10px] space-y-1 overflow-y-auto custom-scrollbar text-slate-500">
+                    <p>> Waiting for Engine Start...</p>
+                </div>
+            </div>
+
+            <!-- 창 3: 절약 토큰 % 창 -->
+            <div class="glass-panel rounded-2xl p-5 flex flex-col items-center justify-center">
+                <h3 class="orbitron text-xs text-blue-400 mb-6 absolute top-5 left-5 tracking-widest uppercase">3. Token Savings</h3>
+                <div class="text-center">
+                    <div id="savings-percent" class="orbitron text-7xl font-bold text-green-500 mb-2">0%</div>
+                    <p class="text-[10px] text-slate-500 orbitron">AVERAGE REDUCTION RATE</p>
+                    <p class="text-[10px] text-blue-400 mt-4">TOTAL SAVED: <span id="saved-count">0</span> TKNS</p>
+                </div>
+            </div>
+
+            <!-- 창 4: 각종 제거 온오프 및 점멸 버튼 -->
+            <div class="glass-panel rounded-2xl p-5">
+                <h3 class="orbitron text-xs text-blue-400 mb-6 tracking-widest uppercase">4. Control Switches</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                        <span class="text-[10px] orbitron text-slate-400">Semantic Pruning</span>
+                        <input type="checkbox" checked class="accent-blue-600">
+                    </div>
+                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                        <span class="text-[10px] orbitron text-slate-400">Loop Blocker</span>
+                        <input type="checkbox" checked class="accent-blue-600">
+                    </div>
+                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                        <span class="text-[10px] orbitron text-slate-400">Context Summary</span>
+                        <input type="checkbox" class="accent-blue-600">
+                    </div>
+                    <button onclick="upgradeTier()" class="col-span-2 mt-2 bg-blue-600 hover:bg-blue-500 py-3 rounded-lg orbitron text-[11px] font-bold transition-all">UPGRADE TO PRO (UNLIMITED)</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        const agentNames = ["AUTO_GPT_MAIN", "CREW_AI_V2", "RESEARCH_AGENT", "DEVELOPER_BOT", "DATA_ANALYST", "WEB_SCANNER"];
-        let activeAgents = new Set();
         let isPro = false;
+        const agentNames = ["AUTO_GPT_V1", "DEVIN_CLONE", "CREW_AI_V2", "RESEARCH_BOT", "DATA_EXTRACTOR"];
+        let activeAgents = new Set();
+        let totalSaved = 0;
 
-        function startSystem() {
+        function enterSystem() {
             document.getElementById('main-screen').classList.add('hidden');
-            document.getElementById('control-screen').classList.remove('hidden');
+            document.getElementById('control-center').classList.remove('hidden');
             renderAgents();
         }
 
         function renderAgents() {
-            const container = document.getElementById('agent-container');
-            agentNames.forEach((name, index) => {
+            const container = document.getElementById('agent-list');
+            agentNames.forEach((name, idx) => {
                 const div = document.createElement('div');
-                div.className = "flex items-center justify-between p-4 bg-slate-900/50 rounded-2xl border border-slate-800 transition-all";
+                div.className = "flex items-center justify-between p-3 bg-slate-900/40 border border-slate-800 rounded-xl transition-all";
                 div.innerHTML = `
-                    <div class="flex items-center gap-4">
-                        <div id="led-${index}" class="led-dot"></div>
-                        <span class="text-xs orbitron text-slate-400">${name}</span>
+                    <div class="flex items-center gap-3">
+                        <div id="led-${idx}" class="led-dot"></div>
+                        <span class="text-[10px] orbitron text-slate-300">${name}</span>
                     </div>
-                    <input type="checkbox" onchange="toggleAgent(${index}, this)" class="w-4 h-4 rounded bg-slate-800 border-slate-700 text-blue-600 focus:ring-0">
+                    <input type="checkbox" onchange="toggleAgent(${idx}, this)" class="w-4 h-4 rounded bg-slate-800 border-slate-700">
                 `;
                 container.appendChild(div);
             });
         }
 
-        function toggleAgent(index, checkbox) {
+        function toggleAgent(idx, checkbox) {
             if (!isPro && activeAgents.size >= 3 && checkbox.checked) {
                 checkbox.checked = false;
-                alert("무료 버전은 최대 3개까지만 관리 가능합니다!");
+                alert("FREE 버전 한도: 최대 3개 에이전트만 관리 가능합니다.");
                 return;
             }
-
-            if (checkbox.checked) {
-                activeAgents.add(index);
-                addLog(`GUARD ACTIVE: ${agentNames[index]}`, "text-blue-400");
-            } else {
-                activeAgents.delete(index);
-                addLog(`GUARD OFF: ${agentNames[index]}`, "text-slate-600");
-                document.getElementById(`led-${index}`).style.backgroundColor = "#334155";
-                document.getElementById(`led-${index}`).style.boxShadow = "none";
-            }
+            if (checkbox.checked) { activeAgents.add(idx); addLog(`START: ${agentNames[idx]} GUARDING...`); }
+            else { activeAgents.delete(idx); addLog(`STOP: ${agentNames[idx]} DISCONNECTED.`); resetLED(idx); }
         }
 
-        // 모뎀 스타일 실시간 점멸 시뮬레이션
+        // 실시간 트래픽 점멸 및 수치 시뮬레이션
         setInterval(() => {
-            activeAgents.forEach(id => {
-                if (Math.random() > 0.7) {
-                    const led = document.getElementById(`led-${id}`);
+            activeAgents.forEach(idx => {
+                if (Math.random() > 0.6) {
+                    const led = document.getElementById(`led-${idx}`);
                     led.style.backgroundColor = "#ef4444";
                     led.style.boxShadow = "0 0 10px #ef4444";
                     
-                    addLog(`[TRAFFIC] ${agentNames[id]} OPTIMIZED`, "text-[10px] text-slate-500");
-
-                    setTimeout(() => {
-                        led.style.backgroundColor = "#334155";
-                        led.style.boxShadow = "none";
-                    }, 150);
+                    const saved = Math.floor(Math.random() * 50);
+                    totalSaved += saved;
+                    document.getElementById('saved-count').innerText = totalSaved.toLocaleString();
+                    document.getElementById('savings-percent').innerText = Math.min(65, Math.floor(totalSaved / 500)) + "%";
+                    
+                    addLog(`[${agentNames[idx]}] DATA OPTIMIZED: -${saved} TKNS`, "text-blue-400");
+                    setTimeout(() => resetLED(idx), 100);
                 }
             });
-        }, 600);
+        }, 800);
 
-        function addLog(msg, colorClass) {
+        function resetLED(idx) {
+            const led = document.getElementById(`led-${idx}`);
+            if (led) { led.style.backgroundColor = "#334155"; led.style.boxShadow = "none"; }
+        }
+
+        function addLog(msg, color = "text-slate-500") {
             const log = document.getElementById('behavior-log');
             const p = document.createElement('p');
-            p.className = colorClass;
-            p.innerHTML = `<span class="text-slate-800">[${new Date().toLocaleTimeString()}]</span> > ${msg}`;
+            p.className = color;
+            p.innerHTML = `<span class="text-slate-800">[${new Date().toLocaleTimeString()}]</span> ${msg}`;
             log.prepend(p);
+        }
+
+        function upgradeTier() {
+            const key = prompt("PRO 라이선스 키를 입력하세요:");
+            if (key === "PRO-1234") {
+                isPro = true;
+                document.getElementById('tier-status').innerText = "PRO VERSION (UNLIMITED)";
+                document.getElementById('tier-status').className = "text-[10px] orbitron text-green-500";
+                alert("PRO 버전으로 승격되었습니다! 이제 무제한 감시가 가능합니다.");
+            }
         }
     </script>
 </body>
