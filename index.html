@@ -6,164 +6,141 @@
     <script src="https://tailwindcss.com"></script>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        body { font-family: 'Noto Sans KR', sans-serif; background-color: #020617; color: #e2e8f0; overflow: hidden; }
+        body { font-family: 'Noto Sans KR', sans-serif; background: #020617; color: #e2e8f0; overflow: hidden; }
         .orbitron { font-family: 'Orbitron', sans-serif; }
         .neon-blue { color: #3b82f6; text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
-        .glass-panel { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(51, 65, 85, 0.5); backdrop-filter: blur(10px); height: 100%; }
-        .led-dot { width: 10px; height: 10px; border-radius: 50%; background-color: #334155; transition: 0.1s; }
+        .glass-panel { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(51, 65, 85, 0.4); backdrop-filter: blur(12px); }
+        .led-dot { width: 10px; height: 10px; border-radius: 50%; background-color: #1e293b; transition: all 0.1s; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.3); border-radius: 10px; }
+        #main-screen { background: radial-gradient(circle at center, #1e3a8a 0%, #020617 100%); }
     </style>
 </head>
 <body>
 
-    <!-- [1. 메인 파란색 바탕 랜딩 화면] -->
-    <div id="main-screen" class="h-screen flex flex-col items-center justify-center bg-blue-900/20">
-        <div class="text-center">
-            <h1 class="orbitron text-7xl font-black neon-blue mb-8">AURA AI</h1>
-            <p class="orbitron text-slate-400 tracking-[0.5em] mb-12">THE AGENT OS GUARD</p>
-            <button onclick="enterSystem()" class="orbitron bg-blue-600 hover:bg-blue-500 text-white px-20 py-6 rounded-full text-2xl font-bold transition-all shadow-[0_0_50px_rgba(59,130,246,0.4)]">
-                SYSTEM START
+    <!-- [1. 메인 랜딩 화면] -->
+    <div id="main-screen" class="h-screen flex flex-col items-center justify-center relative">
+        <header class="absolute top-8 left-8">
+            <h1 class="orbitron text-3xl font-black tracking-tighter neon-blue uppercase">AURAAI.KR</h1>
+        </header>
+
+        <div class="text-center z-10">
+            <h2 class="orbitron text-7xl font-black mb-4 tracking-tighter text-white">AURA <span class="text-blue-500 font-bold">GUARD</span></h2>
+            <p class="text-slate-500 tracking-[0.4em] font-light mb-16 uppercase text-xs">The Universal Agent Guard</p>
+
+            <!-- 원본의 이모티콘 그리드 복구 -->
+            <div class="grid grid-cols-5 gap-10 mb-20 max-w-5xl mx-auto px-6">
+                <div class="group"><div class="text-4xl mb-3 transition-transform group-hover:scale-110">✂️</div><p class="text-sm font-medium text-slate-300">토큰 최적화</p><p class="text-[10px] text-slate-500">비용 가위질</p></div>
+                <div class="group"><div class="text-4xl mb-3 transition-transform group-hover:scale-110">🛑</div><p class="text-sm font-medium text-slate-300">무한루프 방지</p><p class="text-[10px] text-slate-500">지능적 차단</p></div>
+                <div class="group"><div class="text-4xl mb-3 transition-transform group-hover:scale-110">📡</div><p class="text-sm font-medium text-slate-300">실시간 관제</p><p class="text-[10px] text-slate-500">에이전트 감시</p></div>
+                <div class="group"><div class="text-4xl mb-3 transition-transform group-hover:scale-110">📉</div><p class="text-sm font-medium text-slate-300">비용 절감</p><p class="text-[10px] text-slate-500">소모율 25%↓</p></div>
+                <div class="group"><div class="text-4xl mb-3 transition-transform group-hover:scale-110">🛡️</div><p class="text-sm font-medium text-slate-300">통합 제어</p><p class="text-[10px] text-slate-500">OS급 가드</p></div>
+            </div>
+
+            <button onclick="startSystem()" class="orbitron bg-blue-600 hover:bg-blue-500 text-white px-20 py-6 rounded-full text-2xl font-bold transition-all border border-blue-400 shadow-[0_0_50px_rgba(59,130,246,0.3)]">
+                START SYSTEM
             </button>
         </div>
     </div>
 
-    <!-- [2. 4분할 관제 시스템] -->
-    <div id="control-center" class="hidden h-screen p-6 flex flex-col">
-        <header class="flex justify-between items-center mb-6 px-2">
-            <h1 class="orbitron text-xl font-bold neon-blue">AURA <span class="text-slate-500 text-sm italic">CONTROL DESK</span></h1>
-            <div id="tier-status" class="text-[10px] orbitron text-blue-500">FREE TIER MODE (MAX 3)</div>
+    <!-- [2. 4분할 제어 시스템] -->
+    <div id="control-center" class="hidden h-screen p-8 flex flex-col">
+        <header class="flex justify-between items-center mb-6">
+            <h1 class="orbitron text-2xl font-bold neon-blue uppercase">AURA CONTROL</h1>
+            <div class="flex items-center gap-6 text-[10px] orbitron">
+                <span id="tier-badge" class="text-blue-500">FREE TIER (MAX 3)</span>
+                <button onclick="location.reload()" class="text-red-500 border border-red-500/30 px-4 py-1 rounded">EXIT</button>
+            </div>
         </header>
 
-        <!-- 4분할 그리드 -->
         <div class="grid grid-cols-2 grid-rows-2 gap-6 flex-1 overflow-hidden">
-            
-            <!-- 창 1: AI 에이전트 상태창 -->
-            <div class="glass-panel rounded-2xl p-5 flex flex-col">
-                <h3 class="orbitron text-xs text-blue-400 mb-4 uppercase tracking-widest">1. Agent Status</h3>
-                <div id="agent-list" class="space-y-3 overflow-y-auto custom-scrollbar pr-2">
-                    <!-- 에이전트 리스트 (JS로 생성) -->
-                </div>
+            <!-- 창 1: 에이전트 리스트 -->
+            <div class="glass-panel rounded-3xl p-6 flex flex-col overflow-hidden">
+                <h3 class="orbitron text-xs text-blue-500 mb-6 tracking-widest">AGENT LIST</h3>
+                <div id="agent-list" class="flex-1 space-y-4 overflow-y-auto custom-scrollbar pr-2"></div>
             </div>
 
-            <!-- 창 2: 실제 동작 상태 로그창 -->
-            <div class="glass-panel rounded-2xl p-5 flex flex-col">
-                <h3 class="orbitron text-xs text-blue-400 mb-4 uppercase tracking-widest">2. Behavior Log</h3>
-                <div id="behavior-log" class="flex-1 font-mono text-[10px] space-y-1 overflow-y-auto custom-scrollbar text-slate-500">
-                    <p>> Waiting for Engine Start...</p>
-                </div>
+            <!-- 창 2: 동작 로그 -->
+            <div class="glass-panel rounded-3xl p-6 flex flex-col overflow-hidden">
+                <h3 class="orbitron text-xs text-blue-500 mb-6 tracking-widest">BEHAVIOR LOG</h3>
+                <div id="behavior-log" class="flex-1 font-mono text-[10px] space-y-1 overflow-y-auto custom-scrollbar text-slate-500"></div>
             </div>
 
-            <!-- 창 3: 절약 토큰 % 창 -->
-            <div class="glass-panel rounded-2xl p-5 flex flex-col items-center justify-center">
-                <h3 class="orbitron text-xs text-blue-400 mb-6 absolute top-5 left-5 tracking-widest uppercase">3. Token Savings</h3>
-                <div class="text-center">
-                    <div id="savings-percent" class="orbitron text-7xl font-bold text-green-500 mb-2">0%</div>
-                    <p class="text-[10px] text-slate-500 orbitron">AVERAGE REDUCTION RATE</p>
-                    <p class="text-[10px] text-blue-400 mt-4">TOTAL SAVED: <span id="saved-count">0</span> TKNS</p>
-                </div>
+            <!-- 창 3: 절약 통계 -->
+            <div class="glass-panel rounded-3xl p-6 flex flex-col items-center justify-center relative">
+                <h3 class="orbitron text-xs text-blue-500 absolute top-6 left-6 uppercase tracking-widest">Efficiency</h3>
+                <div id="savings-percent" class="orbitron text-8xl font-black text-green-500">0%</div>
+                <div class="mt-4 orbitron text-slate-500 text-sm">SAVED: <span id="saved-tokens" class="text-blue-400">0</span> TKNS</div>
             </div>
 
-            <!-- 창 4: 각종 제거 온오프 및 점멸 버튼 -->
-            <div class="glass-panel rounded-2xl p-5">
-                <h3 class="orbitron text-xs text-blue-400 mb-6 tracking-widest uppercase">4. Control Switches</h3>
+            <!-- 창 4: 제어 스위치 -->
+            <div class="glass-panel rounded-3xl p-6">
+                <h3 class="orbitron text-xs text-blue-500 mb-6 uppercase tracking-widest">Control Switches</h3>
                 <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
-                        <span class="text-[10px] orbitron text-slate-400">Semantic Pruning</span>
-                        <input type="checkbox" checked class="accent-blue-600">
-                    </div>
-                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
-                        <span class="text-[10px] orbitron text-slate-400">Loop Blocker</span>
-                        <input type="checkbox" checked class="accent-blue-600">
-                    </div>
-                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
-                        <span class="text-[10px] orbitron text-slate-400">Context Summary</span>
-                        <input type="checkbox" class="accent-blue-600">
-                    </div>
-                    <button onclick="upgradeTier()" class="col-span-2 mt-2 bg-blue-600 hover:bg-blue-500 py-3 rounded-lg orbitron text-[11px] font-bold transition-all">UPGRADE TO PRO (UNLIMITED)</button>
+                    <button class="bg-slate-900/50 p-4 rounded-2xl border border-slate-800 text-[11px] orbitron text-left hover:border-blue-500/50 transition-all">✂️ SEMANTIC PRUNING</button>
+                    <button class="bg-slate-900/50 p-4 rounded-2xl border border-slate-800 text-[11px] orbitron text-left hover:border-blue-500/50 transition-all">🛑 LOOP BLOCKER</button>
+                    <button class="bg-slate-900/50 p-4 rounded-2xl border border-slate-800 text-[11px] orbitron text-left hover:border-blue-500/50 transition-all">📡 REAL-TIME MONITOR</button>
+                    <button onclick="alert('PRO 라이선스가 필요합니다.')" class="bg-blue-600 p-4 rounded-2xl text-[11px] orbitron font-bold">💎 UPGRADE TO PRO</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        let isPro = false;
-        const agentNames = ["AUTO_GPT_V1", "DEVIN_CLONE", "CREW_AI_V2", "RESEARCH_BOT", "DATA_EXTRACTOR"];
+        const agents = ["AUTO_GPT_01", "RESEARCH_V2", "CODE_PILOT", "DATA_EXTRACT", "WEB_SCRAPER"];
         let activeAgents = new Set();
         let totalSaved = 0;
 
-        function enterSystem() {
-            document.getElementById('main-screen').classList.add('hidden');
+        function startSystem() {
+            document.getElementById('main-screen').style.display = 'none';
             document.getElementById('control-center').classList.remove('hidden');
-            renderAgents();
+            render();
         }
 
-        function renderAgents() {
-            const container = document.getElementById('agent-list');
-            agentNames.forEach((name, idx) => {
+        function render() {
+            const list = document.getElementById('agent-list');
+            agents.forEach((name, i) => {
                 const div = document.createElement('div');
-                div.className = "flex items-center justify-between p-3 bg-slate-900/40 border border-slate-800 rounded-xl transition-all";
+                div.className = "flex items-center justify-between p-4 bg-slate-900/30 border border-slate-800 rounded-2xl";
                 div.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <div id="led-${idx}" class="led-dot"></div>
-                        <span class="text-[10px] orbitron text-slate-300">${name}</span>
-                    </div>
-                    <input type="checkbox" onchange="toggleAgent(${idx}, this)" class="w-4 h-4 rounded bg-slate-800 border-slate-700">
+                    <div class="flex items-center gap-4"><div id="led-${i}" class="led-dot"></div><span class="text-[11px] orbitron">${name}</span></div>
+                    <input type="checkbox" onchange="toggle(${i}, this)" class="w-4 h-4 accent-blue-600">
                 `;
-                container.appendChild(div);
+                list.appendChild(div);
             });
         }
 
-        function toggleAgent(idx, checkbox) {
-            if (!isPro && activeAgents.size >= 3 && checkbox.checked) {
-                checkbox.checked = false;
-                alert("FREE 버전 한도: 최대 3개 에이전트만 관리 가능합니다.");
+        function toggle(i, cb) {
+            if (activeAgents.size >= 3 && cb.checked) {
+                cb.checked = false;
+                alert("무료 버전 한도 초과 (3개)");
                 return;
             }
-            if (checkbox.checked) { activeAgents.add(idx); addLog(`START: ${agentNames[idx]} GUARDING...`); }
-            else { activeAgents.delete(idx); addLog(`STOP: ${agentNames[idx]} DISCONNECTED.`); resetLED(idx); }
+            cb.checked ? activeAgents.add(i) : activeAgents.delete(i);
+            addLog(cb.checked ? `ACTIVE: ${agents[i]}` : `OFF: ${agents[i]}`);
         }
 
-        // 실시간 트래픽 점멸 및 수치 시뮬레이션
         setInterval(() => {
-            activeAgents.forEach(idx => {
+            activeAgents.forEach(i => {
                 if (Math.random() > 0.6) {
-                    const led = document.getElementById(`led-${idx}`);
+                    const led = document.getElementById(`led-${i}`);
                     led.style.backgroundColor = "#ef4444";
                     led.style.boxShadow = "0 0 10px #ef4444";
-                    
-                    const saved = Math.floor(Math.random() * 50);
+                    const saved = Math.floor(Math.random() * 80);
                     totalSaved += saved;
-                    document.getElementById('saved-count').innerText = totalSaved.toLocaleString();
-                    document.getElementById('savings-percent').innerText = Math.min(65, Math.floor(totalSaved / 500)) + "%";
-                    
-                    addLog(`[${agentNames[idx]}] DATA OPTIMIZED: -${saved} TKNS`, "text-blue-400");
-                    setTimeout(() => resetLED(idx), 100);
+                    document.getElementById('saved-tokens').innerText = totalSaved.toLocaleString();
+                    document.getElementById('savings-percent').innerText = Math.min(65, Math.floor(totalSaved/500)) + "%";
+                    addLog(`[${agents[i]}] OPTIMIZING -${saved} TKNS`);
+                    setTimeout(() => { led.style.backgroundColor = "#1e293b"; led.style.boxShadow = "none"; }, 150);
                 }
             });
         }, 800);
 
-        function resetLED(idx) {
-            const led = document.getElementById(`led-${idx}`);
-            if (led) { led.style.backgroundColor = "#334155"; led.style.boxShadow = "none"; }
-        }
-
-        function addLog(msg, color = "text-slate-500") {
+        function addLog(msg) {
             const log = document.getElementById('behavior-log');
             const p = document.createElement('p');
-            p.className = color;
-            p.innerHTML = `<span class="text-slate-800">[${new Date().toLocaleTimeString()}]</span> ${msg}`;
+            p.innerHTML = `<span class="text-slate-800">[${new Date().toLocaleTimeString()}]</span> > ${msg}`;
             log.prepend(p);
-        }
-
-        function upgradeTier() {
-            const key = prompt("PRO 라이선스 키를 입력하세요:");
-            if (key === "PRO-1234") {
-                isPro = true;
-                document.getElementById('tier-status').innerText = "PRO VERSION (UNLIMITED)";
-                document.getElementById('tier-status').className = "text-[10px] orbitron text-green-500";
-                alert("PRO 버전으로 승격되었습니다! 이제 무제한 감시가 가능합니다.");
-            }
         }
     </script>
 </body>
