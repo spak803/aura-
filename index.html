@@ -76,6 +76,15 @@
                 <div id="drop-zone" class="border-2 border-dashed border-slate-700 rounded-2xl flex-1 flex flex-col items-center justify-center p-4 hover:border-blue-500 transition-all cursor-pointer">
                     <p class="text-xs text-slate-500 text-center">에이전트를 선택하면<br>AURA 가드가 활성화됩니다</p>
                 </div>
+               <div class="mt-4 flex gap-2 justify-center">
+  <button onclick="scanLocalAgents()" class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg text-xs orbitron">
+    수동 검색
+  </button>
+
+  <button onclick="callAuraProxyTest()" class="bg-green-600 hover:bg-green-500 px-4 py-2 rounded-lg text-xs orbitron">
+    AI 프록시 테스트
+  </button>
+</div>
             </div>
 
             <div class="col-span-8 glass-panel rounded-3xl p-6 flex flex-col overflow-hidden">
@@ -214,6 +223,52 @@
             addLog("에이전트 보호 시스템 가동.", "system");
             startSimulation();
         }
+        const AURA_PROXY_URL = "http://localhost:7070";
+const ADMIN_KEY = "707070";
+
+async function scanLocalAgents() {
+  const res = await fetch(`${AURA_PROXY_URL}/api/agents/scan?admin_key=${ADMIN_KEY}`);
+  const data = await res.json();
+
+  addLog("로컬 AI 에이전트 스캔 완료", "system");
+
+  const zone = document.getElementById("drop-zone");
+  zone.innerHTML = data.agents.length
+    ? data.agents.map(a => `
+        <div class="bg-slate-900 border border-blue-500/20 rounded-xl p-3 mb-2 text-left w-full">
+          <div class="text-blue-400 font-bold text-xs">${a.name}</div>
+          <div class="text-slate-500 text-[10px]">PID: ${a.pid}</div>
+          <div class="text-slate-500 text-[10px]">CPU: ${a.cpu || 0}% / MEM: ${a.mem || 0}%</div>
+        </div>
+      `).join("")
+    : `<p class="text-xs text-slate-500 text-center">감지된 AI 에이전트가 없습니다</p>`;
+}
+
+async function callAuraProxyTest() {
+  const prompt = window.prompt("테스트 프롬프트를 입력하세요");
+  if (!prompt) return;
+
+  addLog("AURA 프록시로 AI 요청 전송 중...", "system");
+
+  const res = await fetch(`${AURA_PROXY_URL}/v1/chat/completions`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-admin-key": ADMIN_KEY
+    },
+    body: JSON.stringify({
+      model: "gpt-4.1-mini",
+      messages: [
+        { role: "user", content: prompt }
+      ]
+    })
+  });
+
+  const data = await res.json();
+  const answer = data.choices?.[0]?.message?.content || JSON.stringify(data);
+
+  addLog("AI 응답: " + answer, "system");
+}
     </script>
 </body>
 </html>
